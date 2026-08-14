@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mediaflux | Building AI Solutions from the Ground Up</title>
+<meta name="description" content="Enterprise agentic AI solutions. Model-agnostic architecture, institutional memory systems, and proven Penta-Alignment methodology.">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+      }
+    }
+  }
+}
+</script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  :root {
+    /* Theme Colors - Easily swappable */
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+    --primary-light: #60a5fa;
+    --secondary: #8b5cf6;
+    --secondary-dark: #7c3aed;
+    --accent: #f472b6;
+    --background: #020617;
+    --surface: #0f172a;
+    --surface-light: #1e293b;
+    --border: #334155;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #64748b;
+  }
+
+  body { font-family: 'Inter', sans-serif; }
+  .gradient-text {
+    background: linear-gradient(135deg, var(--primary-light), var(--secondary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gradient-bg {
+    background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1));
+  }
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+  .fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--background); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  html { scroll-behavior: smooth; }
+
+  /* Form Steps */
+  .form-step { display: none; }
+  .form-step.active { display: block; animation: slideIn 0.3s ease-out; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .progress-bar {
+    height: 4px;
+    background: var(--surface-light);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transition: width 0.3s ease;
+  }
+</style>
+</head>
+<body class="bg-[var(--background)] text-[var(--text-primary)] antialiased">
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+const h = React.createElement;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Navigation
+// ═══════════════════════════════════════════════════════════════════════════
+
+function Nav({ onNavigate, activeSection }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navItems = [
+    { id: 'services', label: 'Services' },
+    { id: 'methodology', label: 'Methodology' },
+    { id: 'why-us', label: 'Why Mediaflux' },
+    { id: 'contact', label: 'Contact' },
+  ];
+
+  return h('nav', {
+    className: `fixed top-0 left-0 right-0 z-50 transition-all ${scrolled ? 'bg-[var(--surface)]/95 backdrop-blur-lg border-b border-[var(--border)]' : 'bg-transparent'}`
+  },
+    h('div', { className: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8' },
+      h('div', { className: 'flex items-center justify-between h-16' },
+        // Logo
+        h('div', { className: 'flex items-center gap-3 cursor-pointer', onClick: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+          h('div', { className: 'w-10 h-10 bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] rounded-lg flex items-center justify-center text-white font-bold text-sm' }, 'MF'),
+          h('div', null,
+            h('div', { className: 'font-bold text-[var(--text-primary)] text-lg leading-none' }, 'Mediaflux'),
+            h('div', { className: 'text-[10px] text-[var(--text-muted)] uppercase tracking-wider' }, 'Flux Agentic'),
+          ),
+        ),
+
+        // Desktop Nav
+        h('div', { className: 'hidden md:flex items-center gap-6' },
+          ...navItems.map(item => h('button', {
+            key: item.id,
+            onClick: () => onNavigate(item.id),
+            className: `text-sm font-medium transition-colors ${activeSection === item.id ? 'text-[var(--primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`
+          }, item.label)),
+          h('button', {
+            onClick: () => onNavigate('onboarding'),
+            className: 'px-4 py-2 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity'
+          }, 'Get Started'),
+        ),
+
+        // Mobile Toggle
+        h('button', {
+          className: 'md:hidden text-[var(--text-secondary)]',
+          onClick: () => setMobileOpen(!mobileOpen)
+        }, h('svg', { width: 24, height: 24, fill: 'none', stroke: 'currentColor', strokeWidth: 2, viewBox: '0 0 24 24' },
+          h('path', { d: mobileOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16' })
+        )),
+      ),
+    ),
+
+    // Mobile Menu
+    mobileOpen && h('div', { className: 'md:hidden bg-[var(--surface)] border-t border-[var(--border)]' },
+      h('div', { className: 'px-4 py-4 space-y-3' },
+        ...navItems.map(item => h('button', {
+          key: item.id,
+          onClick: () => { onNavigate(item.id); setMobileOpen(false); },
+          className: 'block w-full text-left px-4 py-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-light)] rounded-lg'
+        }, item.label)),
+        h('button', {
+          onClick: () => { onNavigate('onboarding'); setMobileOpen(false); },
+          className: 'block w-full px-4 py-2 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white rounded-lg text-sm font-semibold'
+        }, 'Get Started'),
+      ),
+    ),
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Hero Section
+// ═══════════════════════════════════════════════════════════════════════════
+
+function Hero({ onNavigate }) {
+  return h('section', { className: 'relative min-h-screen flex items-center justify-center px-4 pt-16 overflow-hidden' },
+    // Background gradient
+    h('div', { className: 'absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-transparent to-[var(--secondary)]/5' }),
+    h('div', { className: 'absolute top-20 left-10 w-96 h-96 bg-[var(--primary)]/10 rounded-full blur-3xl' }),
+    h('div', { className: 'absolute bottom-20 right-10 w-96 h-96 bg-[var(--secondary)]/10 rounded-full blur-3xl' }),
+
+    h('div', { className: 'relative max-w-5xl mx-auto text-center fade-in' },
+      h('div', { className: 'inline-block px-4 py-1.5 mb-6 text-xs font-semibold text-[var(--primary)] bg-[var(--primary)]/10 border border-[var(--primary)]/20 rounded-full' },
+        'Enterprise Agentic AI Solutions'
+      ),
+      h('h1', { className: 'text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-tight' },
+        h('span', { className: 'text-[var(--text-primary)]' }, 'Building AI Solutions'),
+        h('br'),
+        h('span', { className: 'gradient-text' }, 'From the Ground Up'),
+      ),
+      h('p', { className: 'text-xl sm:text-2xl text-[var(--text-secondary)] mb-10 max-w-3xl mx-auto leading-relaxed' },
+        'Model-agnostic architecture. Institutional memory systems. Proven Penta-Alignment methodology. Build AI infrastructure that compounds weekly, not resets with every model release.'
+      ),
+
+      h('div', { className: 'flex flex-col sm:flex-row items-center justify-center gap-4 mb-12' },
+        h('button', {
+          onClick: () => onNavigate('onboarding'),
+          className: 'px-8 py-4 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white rounded-xl text-lg font-bold hover:opacity-90 transition-opacity shadow-lg shadow-[var(--primary)]/25'
+        }, 'Get Started →'),
+        h('button', {
+          onClick: () => window.location.href = '/framework',
+          className: 'px-8 py-4 bg-[var(--surface-light)] text-[var(--text-primary)] rounded-xl text-lg font-bold hover:bg-[var(--border)] transition-colors border border-[var(--border)]'
+        }, 'Explore the Framework'),
+      ),
+
+      // Stats
+      h('div', { className: 'grid grid-cols-3 gap-8 max-w-2xl mx-auto mt-16 pt-8 border-t border-[var(--border)]' },
+        h('div', null,
+          h('div', { className: 'text-3xl font-black text-[var(--primary)]' }, '1.86x'),
+          h('div', { className: 'text-sm text-[var(--text-muted)] mt-1' }, 'Performance Gain'),
+        ),
+        h('div', null,
+          h('div', { className: 'text-3xl font-black text-[var(--secondary)]' }, '5'),
+          h('div', { className: 'text-sm text-[var(--text-muted)] mt-1' }, 'Alignment Pillars'),
+        ),
+        h('div', null,
+          h('div', { className: 'text-3xl font-black text-[var(--accent)]' }, '100%'),
+          h('div', { className: 'text-sm text-[var(--text-muted)] mt-1' }, 'Data Sovereignty'),
+        ),
+      ),
+    ),
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Services Section
+// ═══════════════════════════════════════════════════════════════════════════
+
+function Services() {
+  const services = [
+    {
+      title: 'AI Audit',
+      subtitle: 'Enterprise & Department Level',
+      icon: '🔍',
+      description: 'Comprehensive assessment of current AI readiness, infrastructure gaps, skill stack maturity, and organizational alignment.',
+      deliverables: ['Current State Analysis', 'Gap Assessment', 'Readiness Score', 'Strategic Roadmap'],
+      color: 'primary',
+    },
+    {
+      title: 'Agentic System Design',
+      subtitle: 'Architecture & Planning',
+      icon: '📐',
+      description: 'Custom harness architecture design, memory topology planning, tool integration strategy, and multi-agent orchestration patterns.',
+      deliverables: ['Architecture Blueprint', 'Memory Design', 'Tool Integration Plan', 'Risk Mitigation'],
+      color: 'secondary',
+    },
+    {
+      title: 'Enterprise Agentic Build',
+      subtitle: 'Implementation & Deployment',
+      icon: '⚙️',
+      description: 'Full build-out of model-agnostic infrastructure, Open Brain memory systems, MCP servers, and institutional knowledge capture.',
+      deliverables: ['Harness Implementation', 'Memory System', 'Tool Stack', 'Training Program'],
+      color: 'accent',
+    },
+    {
+      title: 'Full-Service Management',
+      subtitle: 'Audit → Design → Build → Maintain',
+      icon: '🎯',
+      description: 'End-to-end partnership from assessment through ongoing optimization. We handle infrastructure while you focus on results.',
+      deliverables: ['Everything Above', 'Ongoing Optimization', 'Performance Monitoring', 'Continuous Training'],
+      color: 'primary',
+      featured: true,
+    },
+  ];
+
+  const specialized = [
+    {
+      title: 'Departmental Automation Strategy',
+      description: 'Targeted automation roadmaps for specific departments with quick-win identification and phased implementation.',
+      icon: '🏢',
+    },
+    {
+      title: 'Skill Chain Tools',
+      description: 'Custom agent workflows designed around your team\'s existing expertise and decision-making patterns.',
+      icon: '🔗',
+    },
+  ];
+
+  return h('section', { id: 'services', className: 'py-24 px-4 bg-[var(--surface)]' },
+    h('div', { className: 'max-w-7xl mx-auto' },
+      h('div', { className: 'text-center mb-16' },
+        h('div', { className: 'text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-3' }, 'Services'),
+        h('h2', { className: 'text-4xl sm:text-5xl font-black mb-4' }, 'End-to-End Agentic Solutions'),
+        h('p', { className: 'text-xl text-[var(--text-secondary)] max-w-2xl mx-auto' },
+          'From audit to ongoing optimization. Choose the engagement model that fits your needs.'
+        ),
+      ),
+
+      // Core Services Grid
+      h('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-6 mb-12' },
+        ...services.map((s, i) => h('div', {
+          key: i,
+          className: `relative p-8 rounded-2xl border transition-all card-hover ${s.featured ? 'bg-gradient-to-br from-[var(--primary)]/10 to-[var(--secondary)]/10 border-[var(--primary)]/30 md:col-span-2' : 'bg-[var(--background)] border-[var(--border)]'}`
+        },
+          s.featured && h('div', { className: 'absolute top-4 right-4 px-3 py-1 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white text-xs font-bold rounded-full' }, 'RECOMMENDED'),
+          h('div', { className: 'text-4xl mb-4' }, s.icon),
+          h('h3', { className: 'text-2xl font-bold mb-1' }, s.title),
+          h('div', { className: 'text-sm text-[var(--text-muted)] mb-4' }, s.subtitle),
+          h('p', { className: 'text-[var(--text-secondary)] mb-6 leading-relaxed' }, s.description),
+          h('div', { className: 'space-y-2' },
+            h('div', { className: 'text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-2' }, 'Deliverables:'),
+            ...s.deliverables.map((d, j) => h('div', { key: j, className: 'flex items-center gap-2 text-sm text-[var(--text-secondary)]' },
+              h('div', { className: 'w-1.5 h-1.5 rounded-full bg-[var(--primary)]' }),
+              d,
+            )),
+          ),
+        ))
+      ),
+
+      // Specialized Solutions
+      h('div', { className: 'mt-12' },
+        h('h3', { className: 'text-2xl font-bold mb-6 text-center' }, 'Specialized Solutions'),
+        h('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-6' },
+          ...specialized.map((s, i) => h('div', {
+            key: i,
+            className: 'p-6 rounded-xl bg-[var(--background)] border border-[var(--border)] hover:border-[var(--primary)]/30 transition-colors'
+          },
+            h('div', { className: 'text-3xl mb-3' }, s.icon),
+            h('h4', { className: 'text-xl font-bold mb-2' }, s.title),
+            h('p', { className: 'text-[var(--text-secondary)] text-sm' }, s.description),
+          ))
+        ),
+      ),
+    ),
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Methodology Section
+// ═══════════════════════════════════════════════════════════════════════════
+
+function Methodology() {
+  const pillars = [
+    { name: 'Organization', desc: 'Decision authority, governance tiers, workflow ownership', icon: '🏛️', color: '#3b82f6' },
+    { name: 'Personnel', desc: 'Role design, task routing, performance frameworks', icon: '👥', color: '#10b981' },
+    { name: 'Infrastructure', desc: 'Harness design, model gateway, multi-agent orchestration', icon: '⚡', color: '#8b5cf6' },
+    { name: 'Memory', desc: 'Open Brain, knowledge topology, cross-platform persistence', icon: '🧠', color: '#f59e0b' },
+    { name: 'Skills', desc: 'Four disciplines: Prompt, Context, Intent, Specification Engineering', icon: '📚', color: '#ec4899' },
+  ];
+
+  return h('section', { id: 'methodology', className: 'py-24 px-4' },
+    h('div', { className: 'max-w-7xl mx-auto' },
+      h('div', { className: 'text-center mb-16' },
+        h('div', { className: 'text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-3' }, 'Methodology'),
+        h('h2', { className: 'text-4xl sm:text-5xl font-black mb-4' }, 'Penta-Alignment Framework'),
+        h('p', { className: 'text-xl text-[var(--text-secondary)] max-w-3xl mx-auto' },
+          'Five pillars that must co-evolve for effective enterprise AI. Misalignment at any interface creates organizational friction.'
+        ),
+      ),
+
+      h('div', { className: 'grid grid-cols-1 md:grid-cols-5 gap-4 mb-12' },
+        ...pillars.map((p, i) => h('div', {
+          key: i,
+          className: 'p-6 rounded-xl border border-[var(--border)] bg-[var(--surface)] hover:scale-105 transition-transform'
+        },
+          h('div', { className: 'text-4xl mb-3 text-center' }, p.icon),
+          h('h3', { className: 'text-lg font-bold mb-2 text-center', style: { color: p.color } }, p.name),
+          h('p', { className: 'text-xs text-[var(--text-muted)] text-center' }, p.desc),
+        ))
+      ),
+
+      h('div', { className: 'grid grid-cols-1 md:grid-cols-3 gap-8 mt-16' },
+        h('div', { className: 'p-8 rounded-2xl bg-gradient-to-br from-[var(--primary)]/10 to-transparent border border-[var(--primary)]/20' },
+          h('div', { className: 'text-3xl mb-4' }, '🎯'),
+          h('h3', { className: 'text-xl font-bold mb-3' }, 'Harness-First Architecture'),
+          h('p', { className: 'text-[var(--text-secondary)] text-sm' },
+            'The infrastructure wrapping the model is a 1.86x performance multiplier. Same brain, different body, nearly double the results.'
+          ),
+        ),
+        h('div', { className: 'p-8 rounded-2xl bg-gradient-to-br from-[var(--secondary)]/10 to-transparent border border-[var(--secondary)]/20' },
+          h('div', { className: 'text-3xl mb-4' }, '🔓'),
+          h('h3', { className: 'text-xl font-bold mb-3' }, 'Model-Agnostic Design'),
+          h('p', { className: 'text-[var(--text-secondary)] text-sm' },
+            'No vendor lock-in. Your investment compounds regardless of which model leads next quarter\'s benchmarks.'
+          ),
+        ),
+        h('div', { className: 'p-8 rounded-2xl bg-gradient-to-br from-[var(--accent)]/10 to-transparent border border-[var(--accent)]/20' },
+          h('div', { className: 'text-3xl mb-4' }, '♾️'),
+          h('h3', { className: 'text-xl font-bold mb-3' }, 'Compound Weekly'),
+          h('p', { className: 'text-[var(--text-secondary)] text-sm' },
+            'Systems designed to get smarter over time through institutional memory, not reset with each model release.'
+          ),
+        ),
+      ),
+
+      h('div', { className: 'mt-12 text-center' },
+        h('button', {
+          onClick: () => window.location.href = '/framework',
+          className: 'px-8 py-4 bg-[var(--surface-light)] text-[var(--text-primary)] rounded-xl font-bold hover:bg-[var(--border)] transition-colors border border-[var(--border)]'
+        }, 'Explore the Full Framework →'),
+      ),
+    ),
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Why Mediaflux Section
+// ═══════════════════════════════════════════════════════════════════════════
+
+function WhyUs() {
+  const differentiators = [
+    {
+      title: 'Harness-First Architecture',
+      description: 'We build the infrastructure that makes AI perform 1.86x better. The model is a commodity. The harness is your competitive advantage.',
+      stat: '1.86x',
+      statLabel: 'Performance Multiplier',
+    },
+    {
+      title: 'Model-Agnostic Design',
+      description: 'No vendor lock-in. Future-proof your investment. Switch models based on cost, capability, or compliance without rebuilding infrastructure.',
+      stat: '100%',
+      statLabel: 'Vendor Independence',
+    },
+    {
+      title: 'Own Your Memory',
+      description: 'Data sovereignty and compounding institutional knowledge. Your memory isn\'t hostage to any single platform. Build knowledge that compounds weekly.',
+      stat: 'Infinite',
+      statLabel: 'Knowledge Compound',
+    },
+    {
+      title: 'Skills Transfer, Not Just Tools',
+      description: 'We train your team across all four disciplines: Prompt Craft, Context Engineering, Intent Engineering, and Specification Engineering.',
+      stat: '4',
+      statLabel: 'Discipline Stack',
+    },
+  ];
+
+  return h('section', { id: 'why-us', className: 'py-24 px-4 bg-[var(--surface)]' },
+    h('div', { className: 'max-w-7xl mx-auto' },
+      h('div', { className: 'text-center mb-16' },
+        h('div', { className: 'text-sm font-semibold text-[var(--primary)] uppercase tracking-wider mb-3' }, 'Why Mediaflux'),
+        h('h2', { className: 'text-4xl sm:text-5xl font-black mb-4' }, 'Built to Compound, Not Reset'),
+        h('p', { className: 'text-xl text-[var(--text-secondary)] max-w-3xl mx-auto' },
+          'Most organizations build around the model. We build around the harness. The difference compounds every week.'
+        ),
+      ),
+
+      h('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-8' },
+        ...differentiators.map((d, i) => h('div', {
+          key: i,
+          className: 'p-8 rounded-2xl bg-[var(--background)] border border-[var(--border)] card-hover'
+        },
+          h('div', { className: 'flex items-start justify-between mb-4' },
+            h('h3', { className: 'text-2xl font-bold' }, d.title),
+            h('div', { className: 'text-right' },
+              h('div', { className: 'text-3xl font-black text-[var(--primary)]' }, d.stat),
+              h('div', { className: 'text-xs text-[var(--text-muted)]' }, d.statLabel),
+            ),
+          ),
+          h('p', { className: 'text-[var(--text-secondary)] leading-relaxed' }, d.description),
+        ))
+      ),
+
+      h('div', { className: 'mt-16 p-10 rounded-2xl bg-gradient-to-r from-[var(--primary)]/10 via-[var(--secondary)]/10 to-[var(--accent)]/10 border border-[var(--primary)]/20 text-center' },
+        h('h3', { className: 'text-2xl font-bold mb-4' }, 'Proven by Research'),
+        h('p', { className: 'text-[var(--text-secondary)] mb-6 max-w-3xl mx-auto' },
+          'Our framework is built on 38 primary sources from Anthropic, McKinsey, Gartner, Deloitte, and leading AI research organizations. Every claim verified. Every pattern battle-tested.'
+        ),
+        h('button', {
+          onClick: () => window.location.href = '/framework#sources',
+          className: 'px-6 py-3 bg-[var(--surface-light)] text-[var(--text-primary)] rounded-lg font-semibold hover:bg-[var(--border)] transition-colors border border-[var(--border)]'
+        }, 'View Research Sources →'),
+      ),
+    ),
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Multi-Step Onboarding Form
+// ═══════════════════════════════════════════════════════════════════════════
+
+function OnboardingForm({ onClose }) {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({
+    // Company Info
+    companyName: '',
+    industry: '',
+    size: '',
+    contactName: '',
+    contactEmail: '',
+    contactPhone: '',
+    role: '',
+
+    // Current State
+    hasAI: '',
+    currentTools: [],
+    currentChallenges: [],
+
+    // Service Interest
+    serviceType: '',
+    specificNeeds: [],
+
+    // Technical Context (conditional)
+    techStack: '',
+    dataResidency: '',
+    complianceReqs: '',
+
+    // Timeline & Budget
+    timeline: '',
+    budgetRange: '',
+
+    // Additional Info
+    additionalContext: '',
+  });
+
+  const totalSteps = formData.serviceType === 'audit' ? 5 : 6;
+  const progress = (currentStep / totalSteps) * 100;
+
+  const updateField = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const toggleArrayField = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: prev[field].includes(value)
+        ? prev[field].filter(v => v !== value)
+        : [...prev[field], value]
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log('Form Data:', formData);
+    // Here you would send to your backend/email service
+    alert('Thank you! We\'ll be in touch within 24 hours.');
+    onClose();
+  };
+
+  return h('div', { className: 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm' },
+    h('div', { className: 'relative w-full max-w-3xl max-h-[90vh] bg-[var(--surface)] rounded-2xl shadow-2xl overflow-hidden' },
+      // Header
+      h('div', { className: 'p-6 border-b border-[var(--border)]' },
+        h('div', { className: 'flex items-center justify-between mb-4' },
+          h('h2', { className: 'text-2xl font-bold' }, 'Get Started with Mediaflux'),
+          h('button', {
+            onClick: onClose,
+            className: 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+          }, '✕'),
+        ),
+        h('div', { className: 'progress-bar' },
+          h('div', { className: 'progress-fill', style: { width: `${progress}%` } }),
+        ),
+        h('div', { className: 'text-xs text-[var(--text-muted)] mt-2' }, `Step ${currentStep} of ${totalSteps}`),
+      ),
+
+      // Form Content
+      h('form', { onSubmit: handleSubmit, className: 'p-6 overflow-y-auto max-h-[calc(90vh-200px)]' },
+        // Step 1: Company Info
+        h('div', { className: `form-step ${currentStep === 1 ? 'active' : ''}` },
+          h('h3', { className: 'text-xl font-bold mb-4' }, 'Company Information'),
+          h('div', { className: 'space-y-4' },
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-2' }, 'Company Name *'),
+              h('input', {
+                type: 'text',
+                required: true,
+                value: formData.companyName,
+                onChange: (e) => updateField('companyName', e.target.value),
+                className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+              }),
+            ),
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-2' }, 'Industry *'),
+              h('select', {
+                required: true,
+                value: formData.industry,
+                onChange: (e) => updateField('industry', e.target.value),
+                className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+              },
+                h('option', { value: '' }, 'Select Industry'),
+                h('option', { value: 'government' }, 'Government'),
+                h('option', { value: 'enterprise' }, 'Enterprise Technology'),
+                h('option', { value: 'social' }, 'Social Enterprise'),
+                h('option', { value: 'finance' }, 'Financial Services'),
+                h('option', { value: 'healthcare' }, 'Healthcare'),
+                h('option', { value: 'other' }, 'Other'),
+              ),
+            ),
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-2' }, 'Organization Size *'),
+              h('select', {
+                required: true,
+                value: formData.size,
+                onChange: (e) => updateField('size', e.target.value),
+                className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+              },
+                h('option', { value: '' }, 'Select Size'),
+                h('option', { value: '1-50' }, '1-50 employees'),
+                h('option', { value: '51-200' }, '51-200 employees'),
+                h('option', { value: '201-1000' }, '201-1,000 employees'),
+                h('option', { value: '1001-5000' }, '1,001-5,000 employees'),
+                h('option', { value: '5001+' }, '5,001+ employees'),
+              ),
+            ),
+            h('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-4' },
+              h('div', null,
+                h('label', { className: 'block text-sm font-medium mb-2' }, 'Your Name *'),
+                h('input', {
+                  type: 'text',
+                  required: true,
+                  value: formData.contactName,
+                  onChange: (e) => updateField('contactName', e.target.value),
+                  className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+                }),
+              ),
+              h('div', null,
+                h('label', { className: 'block text-sm font-medium mb-2' }, 'Your Role *'),
+                h('input', {
+                  type: 'text',
+                  required: true,
+                  value: formData.role,
+                  onChange: (e) => updateField('role', e.target.value),
+                  placeholder: 'e.g., CTO, Head of AI',
+                  className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+                }),
+              ),
+            ),
+            h('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-4' },
+              h('div', null,
+                h('label', { className: 'block text-sm font-medium mb-2' }, 'Email *'),
+                h('input', {
+                  type: 'email',
+                  required: true,
+                  value: formData.contactEmail,
+                  onChange: (e) => updateField('contactEmail', e.target.value),
+                  className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+                }),
+              ),
+              h('div', null,
+                h('label', { className: 'block text-sm font-medium mb-2' }, 'Phone'),
+                h('input', {
+                  type: 'tel',
+                  value: formData.contactPhone,
+                  onChange: (e) => updateField('contactPhone', e.target.value),
+                  className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+                }),
+              ),
+            ),
+          ),
+        ),
+
+        // Step 2: Current State
+        h('div', { className: `form-step ${currentStep === 2 ? 'active' : ''}` },
+          h('h3', { className: 'text-xl font-bold mb-4' }, 'Current AI Landscape'),
+          h('div', { className: 'space-y-4' },
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-2' }, 'Do you currently use AI/LLMs in your organization? *'),
+              h('div', { className: 'space-y-2' },
+                ['No, exploring options', 'Yes, limited/experimental use', 'Yes, multiple teams using AI', 'Yes, enterprise-wide deployment'].map(opt =>
+                  h('label', { key: opt, className: 'flex items-center gap-3 p-3 bg-[var(--background)] border border-[var(--border)] rounded-lg cursor-pointer hover:border-[var(--primary)] transition-colors' },
+                    h('input', {
+                      type: 'radio',
+                      name: 'hasAI',
+                      value: opt,
+                      checked: formData.hasAI === opt,
+                      onChange: (e) => updateField('hasAI', e.target.value),
+                      className: 'text-[var(--primary)]'
+                    }),
+                    h('span', null, opt),
+                  )
+                ),
+              ),
+            ),
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-3' }, 'What AI tools/platforms are you currently using? (Select all that apply)'),
+              h('div', { className: 'grid grid-cols-2 gap-2' },
+                ['ChatGPT', 'Claude', 'Gemini', 'Copilot', 'Custom LLM', 'None'].map(tool =>
+                  h('label', { key: tool, className: 'flex items-center gap-2 p-2 bg-[var(--background)] border border-[var(--border)] rounded-lg cursor-pointer hover:border-[var(--primary)] transition-colors' },
+                    h('input', {
+                      type: 'checkbox',
+                      checked: formData.currentTools.includes(tool),
+                      onChange: () => toggleArrayField('currentTools', tool),
+                      className: 'text-[var(--primary)]'
+                    }),
+                    h('span', { className: 'text-sm' }, tool),
+                  )
+                ),
+              ),
+            ),
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-3' }, 'What are your biggest AI challenges? (Select all that apply)'),
+              h('div', { className: 'space-y-2' },
+                ['Vendor lock-in concerns', 'Data privacy/sovereignty', 'Inconsistent results', 'Lack of institutional memory', 'Team skill gaps', 'Organizational alignment', 'Cost management'].map(challenge =>
+                  h('label', { key: challenge, className: 'flex items-center gap-2 p-2 bg-[var(--background)] border border-[var(--border)] rounded-lg cursor-pointer hover:border-[var(--primary)] transition-colors' },
+                    h('input', {
+                      type: 'checkbox',
+                      checked: formData.currentChallenges.includes(challenge),
+                      onChange: () => toggleArrayField('currentChallenges', challenge),
+                      className: 'text-[var(--primary)]'
+                    }),
+                    h('span', { className: 'text-sm' }, challenge),
+                  )
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // Step 3: Service Interest
+        h('div', { className: `form-step ${currentStep === 3 ? 'active' : ''}` },
+          h('h3', { className: 'text-xl font-bold mb-4' }, 'What Are You Looking For?'),
+          h('div', { className: 'space-y-4' },
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-3' }, 'Service Type *'),
+              h('div', { className: 'space-y-3' },
+                [
+                  { value: 'audit', label: 'AI Audit', desc: 'Assess current state and identify opportunities' },
+                  { value: 'design', label: 'Agentic System Design', desc: 'Architecture and planning for new implementation' },
+                  { value: 'build', label: 'Enterprise Agentic Build', desc: 'Full implementation and deployment' },
+                  { value: 'fullservice', label: 'Full-Service Management', desc: 'Audit → Design → Build → Maintain (Recommended)' },
+                  { value: 'specialized', label: 'Specialized Solution', desc: 'Departmental automation or skill chain tools' },
+                ].map(service =>
+                  h('label', { key: service.value, className: `block p-4 bg-[var(--background)] border rounded-lg cursor-pointer transition-colors ${formData.serviceType === service.value ? 'border-[var(--primary)] bg-[var(--primary)]/5' : 'border-[var(--border)] hover:border-[var(--primary)]/50'}` },
+                    h('div', { className: 'flex items-start gap-3' },
+                      h('input', {
+                        type: 'radio',
+                        name: 'serviceType',
+                        value: service.value,
+                        checked: formData.serviceType === service.value,
+                        onChange: (e) => updateField('serviceType', e.target.value),
+                        className: 'mt-1 text-[var(--primary)]'
+                      }),
+                      h('div', null,
+                        h('div', { className: 'font-semibold' }, service.label),
+                        h('div', { className: 'text-sm text-[var(--text-muted)] mt-1' }, service.desc),
+                      ),
+                    ),
+                  )
+                ),
+              ),
+            ),
+            formData.serviceType && h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-3' }, 'Specific Areas of Interest (Select all that apply)'),
+              h('div', { className: 'grid grid-cols-2 gap-2' },
+                ['Harness Architecture', 'Memory Systems', 'Model Gateway', 'MCP Integration', 'Team Training', 'Governance Framework'].map(need =>
+                  h('label', { key: need, className: 'flex items-center gap-2 p-2 bg-[var(--background)] border border-[var(--border)] rounded-lg cursor-pointer hover:border-[var(--primary)] transition-colors' },
+                    h('input', {
+                      type: 'checkbox',
+                      checked: formData.specificNeeds.includes(need),
+                      onChange: () => toggleArrayField('specificNeeds', need),
+                      className: 'text-[var(--primary)]'
+                    }),
+                    h('span', { className: 'text-sm' }, need),
+                  )
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // Step 4: Technical Context (skip for audit-only)
+        formData.serviceType !== 'audit' && h('div', { className: `form-step ${currentStep === 4 ? 'active' : ''}` },
+          h('h3', { className: 'text-xl font-bold mb-4' }, 'Technical Context'),
+          h('div', { className: 'space-y-4' },
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-2' }, 'Current Tech Stack'),
+              h('textarea', {
+                value: formData.techStack,
+                onChange: (e) => updateField('techStack', e.target.value),
+                placeholder: 'Languages, frameworks, cloud providers, databases...',
+                rows: 3,
+                className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+              }),
+            ),
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-2' }, 'Data Residency Requirements'),
+              h('select', {
+                value: formData.dataResidency,
+                onChange: (e) => updateField('dataResidency', e.target.value),
+                className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+              },
+                h('option', { value: '' }, 'Select Option'),
+                h('option', { value: 'none' }, 'No specific requirements'),
+                h('option', { value: 'us' }, 'US-based only'),
+                h('option', { value: 'eu' }, 'EU-based only'),
+                h('option', { value: 'onprem' }, 'On-premises required'),
+                h('option', { value: 'other' }, 'Other (will discuss)'),
+              ),
+            ),
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-2' }, 'Compliance Requirements'),
+              h('textarea', {
+                value: formData.complianceReqs,
+                onChange: (e) => updateField('complianceReqs', e.target.value),
+                placeholder: 'HIPAA, SOC2, FedRAMP, GDPR, etc.',
+                rows: 2,
+                className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+              }),
+            ),
+          ),
+        ),
+
+        // Step 5 (or 4 for audit): Timeline & Budget
+        h('div', { className: `form-step ${currentStep === (formData.serviceType === 'audit' ? 4 : 5) ? 'active' : ''}` },
+          h('h3', { className: 'text-xl font-bold mb-4' }, 'Timeline & Budget'),
+          h('div', { className: 'space-y-4' },
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-2' }, 'Desired Timeline *'),
+              h('select', {
+                required: true,
+                value: formData.timeline,
+                onChange: (e) => updateField('timeline', e.target.value),
+                className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+              },
+                h('option', { value: '' }, 'Select Timeline'),
+                h('option', { value: 'asap' }, 'ASAP (1-2 weeks)'),
+                h('option', { value: '1month' }, 'Within 1 month'),
+                h('option', { value: '3months' }, 'Within 3 months'),
+                h('option', { value: '6months' }, 'Within 6 months'),
+                h('option', { value: 'exploring' }, 'Just exploring'),
+              ),
+            ),
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-2' }, 'Budget Range *'),
+              h('select', {
+                required: true,
+                value: formData.budgetRange,
+                onChange: (e) => updateField('budgetRange', e.target.value),
+                className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+              },
+                h('option', { value: '' }, 'Select Budget Range'),
+                h('option', { value: '<50k' }, 'Under $50,000'),
+                h('option', { value: '50-100k' }, '$50,000 - $100,000'),
+                h('option', { value: '100-250k' }, '$100,000 - $250,000'),
+                h('option', { value: '250-500k' }, '$250,000 - $500,000'),
+                h('option', { value: '500k+' }, '$500,000+'),
+                h('option', { value: 'tbd' }, 'To be determined'),
+              ),
+            ),
+          ),
+        ),
+
+        // Final Step: Additional Context
+        h('div', { className: `form-step ${currentStep === totalSteps ? 'active' : ''}` },
+          h('h3', { className: 'text-xl font-bold mb-4' }, 'Additional Information'),
+          h('div', { className: 'space-y-4' },
+            h('div', null,
+              h('label', { className: 'block text-sm font-medium mb-2' }, 'Anything else you\'d like us to know?'),
+              h('textarea', {
+                value: formData.additionalContext,
+                onChange: (e) => updateField('additionalContext', e.target.value),
+                placeholder: 'Share any additional context, specific goals, or questions...',
+                rows: 5,
+                className: 'w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:outline-none focus:border-[var(--primary)]'
+              }),
+            ),
+            h('div', { className: 'p-4 rounded-lg bg-[var(--primary)]/10 border border-[var(--primary)]/20' },
+              h('div', { className: 'text-sm font-semibold mb-2' }, 'What Happens Next?'),
+              h('ul', { className: 'text-sm text-[var(--text-secondary)] space-y-1' },
+                h('li', null, '1. We\'ll review your submission within 24 hours'),
+                h('li', null, '2. Schedule a discovery call to discuss your needs'),
+                h('li', null, '3. Provide a detailed proposal and timeline'),
+                h('li', null, '4. Begin onboarding once approved'),
+              ),
+            ),
+          ),
+        ),
+      ),
+
+      // Footer
+      h('div', { className: 'p-6 border-t border-[var(--border)] flex items-center justify-between' },
+        h('button', {
+          type: 'button',
+          onClick: () => setCurrentStep(Math.max(1, currentStep - 1)),
+          disabled: currentStep === 1,
+          className: 'px-6 py-2 text-[var(--text-secondary)] disabled:opacity-30 disabled:cursor-not-allowed hover:text-[var(--text-primary)]'
+        }, '← Back'),
+        h('div', { className: 'flex gap-3' },
+          currentStep < totalSteps
+            ? h('button', {
+                type: 'button',
+                onClick: () => setCurrentStep(currentStep + 1),
+                className: 'px-6 py-2 bg-[var(--primary)] text-white rounded-lg font-semibold hover:opacity-90'
+              }, 'Next →')
+            : h('button', {
+                type: 'submit',
+                onClick: handleSubmit,
+                className: 'px-8 py-3 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white rounded-lg font-bold hover:opacity-90'
+              }, 'Submit →'),
+        ),
+      ),
+    ),
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Contact Section
+// ═══════════════════════════════════════════════════════════════════════════
+
+function Contact({ onNavigate }) {
+  return h('section', { id: 'contact', className: 'py-24 px-4' },
+    h('div', { className: 'max-w-5xl mx-auto text-center' },
+      h('h2', { className: 'text-4xl sm:text-5xl font-black mb-6' }, 'Ready to Build?'),
+      h('p', { className: 'text-xl text-[var(--text-secondary)] mb-12 max-w-2xl mx-auto' },
+        'Let\'s discuss how Penta-Alignment can transform your organization\'s AI strategy.'
+      ),
+
+      h('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-8 mb-12' },
+        h('div', { className: 'p-8 rounded-2xl bg-[var(--surface)] border border-[var(--border)]' },
+          h('div', { className: 'text-4xl mb-4' }, '📧'),
+          h('h3', { className: 'text-xl font-bold mb-2' }, 'Email Us'),
+          h('a', { href: 'mailto:info@mediaflux.com', className: 'text-[var(--primary)] hover:underline' }, 'info@mediaflux.com'),
+        ),
+        h('div', { className: 'p-8 rounded-2xl bg-[var(--surface)] border border-[var(--border)]' },
+          h('div', { className: 'text-4xl mb-4' }, '📞'),
+          h('h3', { className: 'text-xl font-bold mb-2' }, 'Call Us'),
+          h('a', { href: 'tel:+1234567890', className: 'text-[var(--primary)] hover:underline' }, '+1 (234) 567-890'),
+        ),
+      ),
+
+      h('button', {
+        onClick: () => onNavigate('onboarding'),
+        className: 'px-10 py-5 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white rounded-xl text-xl font-bold hover:opacity-90 transition-opacity shadow-lg shadow-[var(--primary)]/25'
+      }, 'Start Your Project →'),
+    ),
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Footer
+// ═══════════════════════════════════════════════════════════════════════════
+
+function Footer() {
+  return h('footer', { className: 'py-12 px-4 bg-[var(--surface)] border-t border-[var(--border)]' },
+    h('div', { className: 'max-w-7xl mx-auto' },
+      h('div', { className: 'grid grid-cols-1 md:grid-cols-4 gap-8 mb-8' },
+        h('div', null,
+          h('div', { className: 'flex items-center gap-2 mb-3' },
+            h('div', { className: 'w-8 h-8 bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] rounded-lg flex items-center justify-center text-white font-bold text-xs' }, 'MF'),
+            h('span', { className: 'font-bold text-lg' }, 'Mediaflux'),
+          ),
+          h('p', { className: 'text-sm text-[var(--text-muted)]' }, 'Building AI solutions from the ground up.'),
+        ),
+        h('div', null,
+          h('h4', { className: 'font-bold mb-3' }, 'Services'),
+          h('div', { className: 'space-y-2 text-sm text-[var(--text-muted)]' },
+            h('div', null, 'AI Audit'),
+            h('div', null, 'System Design'),
+            h('div', null, 'Enterprise Build'),
+            h('div', null, 'Full-Service Management'),
+          ),
+        ),
+        h('div', null,
+          h('h4', { className: 'font-bold mb-3' }, 'Resources'),
+          h('div', { className: 'space-y-2 text-sm' },
+            h('a', { href: '/framework', className: 'block text-[var(--text-muted)] hover:text-[var(--primary)]' }, 'Penta-Alignment Framework'),
+            h('a', { href: '/framework#sources', className: 'block text-[var(--text-muted)] hover:text-[var(--primary)]' }, 'Research Sources'),
+          ),
+        ),
+        h('div', null,
+          h('h4', { className: 'font-bold mb-3' }, 'Contact'),
+          h('div', { className: 'space-y-2 text-sm text-[var(--text-muted)]' },
+            h('div', null, 'info@mediaflux.com'),
+            h('div', null, '+1 (234) 567-890'),
+          ),
+        ),
+      ),
+      h('div', { className: 'pt-8 border-t border-[var(--border)] text-center text-sm text-[var(--text-muted)]' },
+        `© ${new Date().getFullYear()} Mediaflux. All rights reserved.`,
+      ),
+    ),
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Main App
+// ═══════════════════════════════════════════════════════════════════════════
+
+function App() {
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+
+  const handleNavigate = (section) => {
+    if (section === 'onboarding') {
+      setShowOnboarding(true);
+    } else {
+      const el = document.getElementById(section);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['services', 'methodology', 'why-us', 'contact'];
+      const current = sections.find(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          return rect.top <= 100 && rect.bottom >= 100;
+        }
+        return false;
+      });
+      setActiveSection(current || '');
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return h('div', { className: 'min-h-screen' },
+    h(Nav, { onNavigate: handleNavigate, activeSection }),
+    h(Hero, { onNavigate: handleNavigate }),
+    h(Services),
+    h(Methodology),
+    h(WhyUs),
+    h(Contact, { onNavigate: handleNavigate }),
+    h(Footer),
+    showOnboarding && h(OnboardingForm, { onClose: () => setShowOnboarding(false) }),
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>
