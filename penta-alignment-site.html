@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penta-Alignment — Enterprise Agentic Architecture</title>
+<meta name="description" content="Strategic framework for aligning organizational structure, personnel, agentic infrastructure, memory architecture, and human skill development.">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+      },
+      colors: {
+        surface: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 700: '#334155', 800: '#1e293b', 900: '#0f172a', 950: '#020617' },
+      }
+    }
+  }
+}
+</script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  body { font-family: 'Inter', system-ui, sans-serif; }
+  .fade-in { animation: fadeIn 0.3s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .gradient-text { background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-active { background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15)); border-left: 2px solid #60a5fa; }
+  .card-hover:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0f172a; }
+  ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body class="bg-surface-950 text-slate-200 antialiased">
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback, createElement: h } = React;
+
+// ─── Data ────────────────────────────────────────────────────────────────────
+
+const SOURCES = {
+  harness: [
+    { title: "Effective Harnesses for Long-Running Agents", url: "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents", org: "Anthropic" },
+    { title: "Building Effective Agents", url: "https://www.anthropic.com/research/building-effective-agents", org: "Anthropic" },
+    { title: "Inside the Claude Agents SDK: Lessons from the AI Engineer Summit", url: "https://www.ml6.eu/en/blog/inside-the-claude-agents-sdk-lessons-from-the-ai-engineer-summit", org: "ML6" },
+    { title: "How Claude Code Works", url: "https://code.claude.com/docs/en/how-claude-code-works", org: "Anthropic" },
+    { title: "Claude Code Architecture (Reverse Engineered)", url: "https://vrungta.substack.com/p/claude-code-architecture-reverse", org: "Community" },
+    { title: "Building Agents with the Claude Agent SDK", url: "https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk", org: "Anthropic" },
+  ],
+  mcp: [
+    { title: "Donating MCP and Establishing the Agentic AI Foundation", url: "https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation", org: "Anthropic" },
+    { title: "The State of MCP — Adoption, Security & Production Readiness", url: "https://zuplo.com/mcp-report", org: "Zuplo" },
+    { title: "A Year of MCP: From Internal Experiment to Industry Standard", url: "https://www.pento.ai/blog/a-year-of-mcp-2025-review", org: "Pento" },
+    { title: "2026: The Year for Enterprise-Ready MCP Adoption", url: "https://www.cdata.com/blog/2026-year-enterprise-ready-mcp-adoption", org: "CData" },
+    { title: "Why the Model Context Protocol Won", url: "https://thenewstack.io/why-the-model-context-protocol-won/", org: "The New Stack" },
+  ],
+  memory: [
+    { title: "Supabase Vector Documentation", url: "https://supabase.com/modules/vector", org: "Supabase" },
+    { title: "Mem0 — Memory Layer for AI Apps ($24M Series A)", url: "https://techcrunch.com/2025/10/28/mem0-raises-24m-from-yc-peak-xv-and-basis-set-to-build-the-memory-layer-for-ai-apps/", org: "TechCrunch" },
+    { title: "pgvector vs Qdrant Comparison", url: "https://www.tigerdata.com/blog/pgvector-vs-qdrant", org: "TigerData" },
+    { title: "Best Vector Databases 2026", url: "https://www.firecrawl.dev/blog/best-vector-databases", org: "Firecrawl" },
+    { title: "Progressive Disclosure for AI Agents", url: "https://www.honra.io/articles/progressive-disclosure-for-ai-agents", org: "Honra" },
+  ],
+  disciplines: [
+    { title: "Tobi Lütke on Context Engineering", url: "https://x.com/tobi/status/1935533422589399127", org: "Shopify CEO" },
+    { title: "How to Live in Everyone Else's Future (Acquired Podcast)", url: "https://www.acquired.fm/episodes/how-to-live-in-everyone-elses-future-with-shopify-ceo-tobi-lutke", org: "Acquired" },
+    { title: "Context Engineering Long-Horizon Agents (Harrison Chase)", url: "https://sequoiacap.com/podcast/context-engineering-our-way-to-long-horizon-agents-langchains-harrison-chase/", org: "Sequoia Capital" },
+    { title: "Spec-Driven Development with AI (GitHub)", url: "https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/", org: "GitHub" },
+    { title: "How to Write a Good Spec for AI Agents", url: "https://www.oreilly.com/radar/how-to-write-a-good-spec-for-ai-agents/", org: "O'Reilly" },
+    { title: "Will AI Spec-Driven Development Redefine Design?", url: "https://www.ey.com/en_ie/insights/ai/will-ai-spec-driven-development-redefine-design", org: "EY" },
+  ],
+  enterprise: [
+    { title: "The Agentic Organization (McKinsey)", url: "https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/the-agentic-organization-contours-of-the-next-paradigm-for-the-ai-era", org: "McKinsey" },
+    { title: "Gartner: 40% of Enterprise Apps with Agents by 2026", url: "https://www.gartner.com/en/newsroom/press-releases/2025-08-26-gartner-predicts-40-percent-of-enterprise-apps-will-feature-task-specific-ai-agents-by-2026-up-from-less-than-5-percent-in-2025", org: "Gartner" },
+    { title: "Agentic AI Strategy (Deloitte)", url: "https://www.deloitte.com/us/en/insights/topics/technology-management/tech-trends/2026/agentic-ai-strategy.html", org: "Deloitte" },
+    { title: "Klarna AI: 2.3M Conversations in First Month", url: "https://www.klarna.com/international/press/klarna-ai-assistant-handles-two-thirds-of-customer-service-chats-in-its-first-month/", org: "Klarna" },
+    { title: "Klarna Rehiring Human Agents After AI Push", url: "https://fortune.com/2025/05/09/klarna-ai-humans-return-on-investment/", org: "Fortune" },
+    { title: "Measuring Agent Autonomy", url: "https://www.anthropic.com/research/measuring-agent-autonomy", org: "Anthropic" },
+    { title: "Telus: 13,000 Custom AI Solutions", url: "https://cloud.google.com/customers/telusai", org: "Google Cloud" },
+    { title: "HBR: 1,200 App Toggles Per Day", url: "https://hbr.org/2022/08/how-much-time-and-energy-do-we-waste-toggling-between-applications", org: "Harvard Business Review" },
+    { title: "Using CLAUDE.md Files", url: "https://claude.com/blog/using-claude-md-files", org: "Anthropic" },
+    { title: "AI Agent Orchestration Patterns", url: "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns", org: "Microsoft Azure" },
+  ],
+};
+
+const PAGES = [
+  { id: "overview", label: "Project Overview" },
+  { id: "philosophy", label: "Our Philosophy" },
+  { id: "harness", label: "Harness Architecture" },
+  { id: "memory", label: "Memory Architecture" },
+  { id: "disciplines", label: "Four Disciplines" },
+  { id: "alignment", label: "Penta-Alignment" },
+  { id: "roadmap", label: "Roadmap" },
+  { id: "sources", label: "Research Sources" },
+];
+
+// ─── Components ──────────────────────────────────────────────────────────────
+
+function Nav({ active, onNav }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  return h('div', null,
+    h('nav', { className: 'fixed top-0 left-0 right-0 z-50 bg-surface-950/90 backdrop-blur-md border-b border-slate-800/60' },
+      h('div', { className: 'max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14' },
+        h('div', { className: 'flex items-center gap-3 cursor-pointer', onClick: () => onNav('overview') },
+          h('div', { className: 'w-7 h-7 bg-gradient-to-br from-blue-500 to-violet-500 rounded-md flex items-center justify-center text-white font-bold text-xs' }, 'PA'),
+          h('span', { className: 'font-semibold text-white text-sm hidden sm:block' }, 'Penta-Alignment'),
+        ),
+        h('div', { className: 'hidden lg:flex items-center gap-1' },
+          PAGES.map(p => h('button', {
+            key: p.id,
+            onClick: () => onNav(p.id),
+            className: `px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${active === p.id ? 'bg-blue-600/20 text-blue-400' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'}`
+          }, p.label))
+        ),
+        h('button', {
+          className: 'lg:hidden text-slate-400 hover:text-white p-2',
+          onClick: () => setMobileOpen(!mobileOpen)
+        }, h('svg', { width: 20, height: 20, fill: 'none', stroke: 'currentColor', strokeWidth: 2, viewBox: '0 0 24 24' },
+          h('path', { d: mobileOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16' })
+        ))
+      )
+    ),
+    mobileOpen && h('div', { className: 'fixed inset-0 z-40 bg-surface-950/95 backdrop-blur-sm pt-14 lg:hidden' },
+      h('div', { className: 'p-4 space-y-1' },
+        PAGES.map(p => h('button', {
+          key: p.id,
+          onClick: () => { onNav(p.id); setMobileOpen(false); },
+          className: `block w-full text-left px-4 py-3 rounded-lg text-sm font-medium ${active === p.id ? 'bg-blue-600/20 text-blue-400' : 'text-slate-300 hover:bg-slate-800'}`
+        }, p.label))
+      )
+    )
+  );
+}
+
+function Metric({ value, label, sub }) {
+  return h('div', { className: 'text-center' },
+    h('div', { className: 'text-2xl sm:text-3xl font-bold text-white' }, value),
+    h('div', { className: 'text-xs text-slate-400 mt-1' }, label),
+    sub && h('div', { className: 'text-xs text-slate-600 mt-0.5' }, sub),
+  );
+}
+
+function SourceLink({ s }) {
+  return h('a', {
+    href: s.url, target: '_blank', rel: 'noopener noreferrer',
+    className: 'flex items-start gap-3 p-3 rounded-lg bg-slate-800/30 border border-slate-700/40 hover:border-blue-500/30 hover:bg-slate-800/50 transition-all group card-hover'
+  },
+    h('div', { className: 'flex-1 min-w-0' },
+      h('div', { className: 'text-sm text-slate-200 font-medium group-hover:text-blue-400 transition-colors truncate' }, s.title),
+      h('div', { className: 'text-xs text-slate-500 mt-0.5' }, s.org),
+    ),
+    h('svg', { className: 'w-4 h-4 text-slate-600 group-hover:text-blue-400 shrink-0 mt-0.5', fill: 'none', stroke: 'currentColor', strokeWidth: 2, viewBox: '0 0 24 24' },
+      h('path', { d: 'M7 17L17 7M17 7H7M17 7v10' })
+    )
+  );
+}
+
+function Section({ children, className }) {
+  return h('section', { className: `fade-in ${className || ''}` }, children);
+}
+
+// ─── Pages ───────────────────────────────────────────────────────────────────
+
+function OverviewPage({ onNav }) {
+  return h(Section, null,
+    h('div', { className: 'max-w-3xl' },
+      h('div', { className: 'text-xs font-mono text-slate-500 uppercase tracking-widest mb-4' }, 'FLUX AGENTIC — Project Overview'),
+      h('h1', { className: 'text-4xl sm:text-5xl font-extrabold text-white leading-tight mb-4' },
+        'Enterprise Agentic Architecture',
+        h('br'),
+        h('span', { className: 'gradient-text' }, 'Penta-Alignment Framework'),
+      ),
+      h('p', { className: 'text-lg text-slate-400 leading-relaxed mb-8 max-w-2xl' },
+        'A strategic architecture for aligning organizational structure, personnel, agentic infrastructure, memory systems, and human skill development into a single interdependent system that compounds weekly.'
+      ),
+    ),
+
+    h('div', { className: 'grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 bg-slate-900/50 rounded-xl border border-slate-800/60 mb-10' },
+      h(Metric, { value: '18', label: 'Claims Verified', sub: 'Against primary sources' }),
+      h(Metric, { value: '3', label: 'Analyses Synthesized', sub: 'Harness + Memory + Skills' }),
+      h(Metric, { value: '5', label: 'Alignment Pillars', sub: 'Penta-Alignment Framework' }),
+      h(Metric, { value: '12mo', label: 'Implementation', sub: 'Phased roadmap' }),
+    ),
+
+    h('div', { className: 'grid grid-cols-1 md:grid-cols-3 gap-4 mb-10' },
+      ...[
+        { title: 'Harness Architecture', desc: 'The infrastructure wrapping the model is a 1.86x performance multiplier. Same brain, different body, nearly double the results.', page: 'harness', color: 'blue' },
+        { title: 'Memory Architecture', desc: 'Persistent, agent-readable memory creates compounding advantages. Your knowledge should not be hostage to any single platform.', page: 'memory', color: 'amber' },
+        { title: 'Four Disciplines', desc: 'Prompting has split into four skills. Most people practice one. The gap is 10x and widening every week.', page: 'disciplines', color: 'emerald' },
+      ].map(c => h('div', {
+        key: c.page,
+        onClick: () => onNav(c.page),
+        className: 'p-5 rounded-xl bg-slate-900/50 border border-slate-800/60 cursor-pointer card-hover transition-all'
+      },
+        h('div', { className: `text-sm font-semibold mb-2 ${c.color === 'blue' ? 'text-blue-400' : c.color === 'amber' ? 'text-amber-400' : 'text-emerald-400'}` }, c.title),
+        h('p', { className: 'text-xs text-slate-400 leading-relaxed' }, c.desc),
+        h('div', { className: 'mt-3 text-xs text-slate-500 hover:text-slate-300' }, 'Read more →'),
+      ))
+    ),
+
+    h('div', { className: 'p-6 rounded-xl bg-slate-900/50 border border-slate-800/60' },
+      h('h3', { className: 'text-lg font-bold text-white mb-3' }, 'The Unified Thesis'),
+      h('div', { className: 'p-4 rounded-lg bg-slate-800/40 border border-slate-700/40 text-center mb-4' },
+        h('p', { className: 'text-white font-semibold' }, 'Model = Commodity. Harness = Performance Multiplier. Memory = Compounding Asset.'),
+        h('p', { className: 'text-white font-semibold' }, 'Disciplines = Human Skill Stack. Organization = Alignment Layer.'),
+      ),
+      h('p', { className: 'text-sm text-slate-400 leading-relaxed' },
+        'Three independent analyses converge on a single strategic conclusion: the model is a commodity. The infrastructure around the model — harness, memory, specifications, and organizational alignment — is the true competitive moat. Organizations that invest in all five layers compound advantages weekly. Organizations that focus on model selection reset to zero with every release.'
+      ),
+    ),
+  );
+}
+
+function PhilosophyPage() {
+  return h(Section, null,
+    h('div', { className: 'text-xs font-mono text-slate-500 uppercase tracking-widest mb-4' }, 'Our Philosophy'),
+    h('h1', { className: 'text-3xl sm:text-4xl font-extrabold text-white mb-6' }, 'Why We Build This Way'),
+
+    h('div', { className: 'space-y-8 max-w-3xl' },
+      h('div', null,
+        h('h2', { className: 'text-xl font-bold text-white mb-3' }, 'Model-Agnostic by Design'),
+        h('p', { className: 'text-sm text-slate-400 leading-relaxed mb-3' },
+          'We treat foundation models as interchangeable commodities. At the AI Engineer Summit in January 2026, Anthropic presented results showing the same Claude model scored 78% on the CORE benchmark in one harness and 42% in another — identical weights, identical training, nearly double the performance. The variable was not intelligence. It was infrastructure.'
+        ),
+        h('p', { className: 'text-sm text-slate-400 leading-relaxed' },
+          'Our architecture invests in layers L1 through L5 — the gateway, execution environment, state management, tool integration, and workflow orchestration — while treating L0 (the model) as a swappable component. This protects against vendor lock-in, enables cost optimization through tiered routing, and ensures our investment compounds regardless of which model leads next quarter\'s benchmarks.'
+        ),
+        h('div', { className: 'mt-3 flex gap-2' },
+          h('a', { href: 'https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents', target: '_blank', className: 'text-xs text-blue-400 hover:text-blue-300' }, 'Anthropic Harness Research →'),
+          h('a', { href: 'https://www.ml6.eu/en/blog/inside-the-claude-agents-sdk-lessons-from-the-ai-engineer-summit', target: '_blank', className: 'text-xs text-blue-400 hover:text-blue-300' }, 'ML6 Summit Analysis →'),
+        ),
+      ),
+
+      h('div', null,
+        h('h2', { className: 'text-xl font-bold text-white mb-3' }, 'Own Your Memory, Own Your Future'),
+        h('p', { className: 'text-sm text-slate-400 leading-relaxed mb-3' },
+          'Platform memories — Claude\'s, ChatGPT\'s, Gemini\'s — are walled gardens designed to create lock-in. Mem0 raised $24M specifically because this problem is severe enough to spawn a VC-backed industry. Our approach: build a PostgreSQL + pgvector memory layer you own outright, exposed via MCP so every AI tool can read and write to it.'
+        ),
+        h('p', { className: 'text-sm text-slate-400 leading-relaxed' },
+          'This isn\'t just about data sovereignty. It\'s about compounding. Every thought captured, every specification written, every decision logged becomes a node in a growing knowledge graph that makes every subsequent AI interaction more valuable. Person A re-explains themselves every session. Person B\'s AI already knows their role, their constraints, their decisions from last Tuesday. That gap widens every week.'
+        ),
+        h('div', { className: 'mt-3 flex gap-2' },
+          h('a', { href: 'https://supabase.com/modules/vector', target: '_blank', className: 'text-xs text-blue-400 hover:text-blue-300' }, 'Supabase Vector Docs →'),
+          h('a', { href: 'https://techcrunch.com/2025/10/28/mem0-raises-24m-from-yc-peak-xv-and-basis-set-to-build-the-memory-layer-for-ai-apps/', target: '_blank', className: 'text-xs text-blue-400 hover:text-blue-300' }, 'Mem0 $24M Raise →'),
+        ),
+      ),
+
+      h('div', null,
+        h('h2', { className: 'text-xl font-bold text-white mb-3' }, 'Specifications Over Prompts'),
+        h('p', { className: 'text-sm text-slate-400 leading-relaxed mb-3' },
+          'The shift from chat-based prompting to autonomous agents changes the bottleneck skill. Real-time prompting rewards verbal fluency and quick iteration. Specification engineering rewards completeness of thinking, anticipation of edge cases, and clear acceptance criteria. Different skills entirely.'
+        ),
+        h('p', { className: 'text-sm text-slate-400 leading-relaxed' },
+          'Shopify CEO Toby Lutke observes that forcing yourself to provide AI with complete context makes you communicate better as a leader: tighter emails, better memos, stronger decision-making. He goes further, suggesting that much of what people call corporate politics is actually bad context engineering — hidden assumptions that play out as grudges. We believe specification engineering produces a "double dividend": better agents AND better organizations.'
+        ),
+        h('div', { className: 'mt-3 flex gap-2' },
+          h('a', { href: 'https://www.acquired.fm/episodes/how-to-live-in-everyone-elses-future-with-shopify-ceo-tobi-lutke', target: '_blank', className: 'text-xs text-blue-400 hover:text-blue-300' }, 'Toby Lutke on Acquired →'),
+          h('a', { href: 'https://www.oreilly.com/radar/how-to-write-a-good-spec-for-ai-agents/', target: '_blank', className: 'text-xs text-blue-400 hover:text-blue-300' }, 'O\'Reilly Spec Guide →'),
+        ),
+      ),
+
+      h('div', null,
+        h('h2', { className: 'text-xl font-bold text-white mb-3' }, 'Educate Before Automate'),
+        h('p', { className: 'text-sm text-slate-400 leading-relaxed mb-3' },
+          'Klarna deployed an AI agent that handled 2.3 million customer conversations in its first month. Then they had to rehire human agents because the system optimized for resolution speed, not customer satisfaction. The model was capable. The intent engineering was missing.'
+        ),
+        h('p', { className: 'text-sm text-slate-400 leading-relaxed' },
+          'We believe each pillar of the Penta-Alignment must be understood before it\'s implemented. Personnel must understand WHY specification engineering matters before receiving templates. Teams must grasp intent engineering before encoding decision hierarchies. The four disciplines build on each other — skipping levels creates the kind of failures that make headlines.'
+        ),
+        h('div', { className: 'mt-3 flex gap-2' },
+          h('a', { href: 'https://www.klarna.com/international/press/klarna-ai-assistant-handles-two-thirds-of-customer-service-chats-in-its-first-month/', target: '_blank', className: 'text-xs text-blue-400 hover:text-blue-300' }, 'Klarna Case Study →'),
+          h('a', { href: 'https://fortune.com/2025/05/09/klarna-ai-humans-return-on-investment/', target: '_blank', className: 'text-xs text-blue-400 hover:text-blue-300' }, 'Klarna Aftermath →'),
+        ),
+      ),
+
+      h('div', null,
+        h('h2', { className: 'text-xl font-bold text-white mb-3' }, 'Alignment as Architecture'),
+        h('p', { className: 'text-sm text-slate-400 leading-relaxed' },
+          'Misalignment between any two pillars creates organizational friction. An advanced agentic infrastructure without matching personnel skills creates underutilization. A reorganized department without supporting agent architecture creates bottlenecks. Personnel upskilling without organizational authority to deploy agents creates frustration. All five must evolve together. This is an architecture problem, not a procurement problem, and not a training problem. It\'s both simultaneously, which is why we align them.'
+        ),
+      ),
+    ),
+  );
+}
+
+function HarnessPage() {
+  return h(Section, null,
+    h('div', { className: 'text-xs font-mono text-slate-500 uppercase tracking-widest mb-4' }, 'Pillar 1 — Infrastructure'),
+    h('h1', { className: 'text-3xl sm:text-4xl font-extrabold text-white mb-2' }, 'Harness Architecture'),
+    h('p', { className: 'text-slate-400 mb-8' }, 'The infrastructure wrapping the model determines performance more than the model itself.'),
+
+    h('div', { className: 'grid grid-cols-3 gap-4 p-5 bg-slate-900/50 rounded-xl border border-slate-800/60 mb-8' },
+      h(Metric, { value: '78%', label: 'Claude Code Harness', sub: 'CORE Benchmark' }),
+      h(Metric, { value: '42%', label: 'SWE Agent Harness', sub: 'Same model, same weights' }),
+      h(Metric, { value: '1.86x', label: 'Performance Gap', sub: 'From harness alone' }),
+    ),
+
+    h('h2', { className: 'text-xl font-bold text-white mb-4' }, 'The Harness Abstraction Stack'),
+    h('div', { className: 'space-y-2 mb-8' },
+      ...['L5: Workflow Orchestration — Multi-agent coordination, task routing, human-in-the-loop governance',
+          'L4: Tool Integration — MCP servers, skills, progressive disclosure, just-in-time loading',
+          'L3: State & Memory — Cross-session persistence, institutional memory, context artifacts',
+          'L2: Execution Environment — Local vs. sandboxed, trust boundaries, security posture',
+          'L1: Model Gateway — Model-agnostic routing, cost optimization, capability matching',
+          'L0: Foundation Models — Claude, GPT, Gemini, open-source — interchangeable at this layer',
+      ].map((l, i) => h('div', { key: i, className: 'flex gap-3 items-stretch' },
+        h('div', { className: `w-2 rounded-full ${i < 5 ? 'bg-blue-500' : 'bg-slate-600'}` }),
+        h('div', { className: 'flex-1 p-3 rounded-lg bg-slate-800/40 border border-slate-700/40 text-sm text-slate-300' }, l),
+      ))
+    ),
+    h('p', { className: 'text-xs text-slate-500 mb-8' }, 'L1–L5 constitute the harness. L0 is the model. Invest in L1–L5 as your strategic differentiator.'),
+
+    h('h2', { className: 'text-xl font-bold text-white mb-4' }, 'Two Philosophies'),
+    h('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-4 mb-8' },
+      h('div', { className: 'p-5 rounded-xl bg-slate-900/50 border border-blue-500/20' },
+        h('h3', { className: 'font-bold text-blue-400 mb-1' }, 'Collaborator Architecture'),
+        h('p', { className: 'text-xs text-slate-500 mb-3' }, 'Anthropic / Claude Code / Cowork'),
+        h('div', { className: 'space-y-2 text-xs text-slate-300' },
+          ...['Agent sits at your desk with full environment access',
+              'Memory lives in structured artifacts (CLAUDE.md, progress files)',
+              'Incrementalism enforced: one feature per session',
+              'Sub-agents with dedicated context windows + shared tasks',
+              'Risk managed via human oversight + forced verification',
+          ].map((t, i) => h('div', { key: i, className: 'p-2 rounded bg-slate-800/40' }, t))
+        ),
+        h('p', { className: 'text-xs text-blue-400/70 mt-3' }, 'Best for: Deep understanding, planning, creative exploration, orchestration'),
+      ),
+      h('div', { className: 'p-5 rounded-xl bg-slate-900/50 border border-emerald-500/20' },
+        h('h3', { className: 'font-bold text-emerald-400 mb-1' }, 'Contractor Architecture'),
+        h('p', { className: 'text-xs text-slate-500 mb-3' }, 'OpenAI / Codex'),
+        h('div', { className: 'space-y-2 text-xs text-slate-300' },
+          ...['Agent works in sealed clean room with code copy',
+              'Memory lives in the repo — repo is system of record',
+              'Linters-as-guardrails: error messages = remediation instructions',
+              'Isolated parallelism: tasks can\'t interfere with each other',
+              'Risk managed via isolation + mechanical enforcement',
+          ].map((t, i) => h('div', { key: i, className: 'p-2 rounded bg-slate-800/40' }, t))
+        ),
+        h('p', { className: 'text-xs text-emerald-400/70 mt-3' }, 'Best for: Independent parallel tasks, autonomous operation, fewer bugs'),
+      ),
+    ),
+
+    h('h2', { className: 'text-xl font-bold text-white mb-4' }, 'Five Axes of Divergence'),
+    h('div', { className: 'space-y-2' },
+      ...[
+        ['Execution', 'Bash-is-all-you-need, composable Unix', 'Built-in DevTools, ephemeral observability'],
+        ['State', 'Agent remembers via artifacts', 'Codebase remembers via repo-as-record'],
+        ['Context', 'Compaction + sub-agent delegation', 'Isolated sandboxes per task'],
+        ['Tools', 'MCP-native, skills as markdown', 'Bidirectional JSON-RPC, server-mediated'],
+        ['Multi-Agent', 'Orchestrated collaboration', 'Isolated parallelism via git branches'],
+      ].map(([axis, claude, codex], i) => h('div', { key: i, className: 'grid grid-cols-3 gap-3 p-3 rounded-lg bg-slate-800/30 border border-slate-700/30 text-xs' },
+        h('div', { className: 'font-semibold text-slate-200' }, axis),
+        h('div', { className: 'text-blue-300/80' }, claude),
+        h('div', { className: 'text-emerald-300/80' }, codex),
+      ))
+    ),
+
+    h('div', { className: 'mt-4' },
+      h('h3', { className: 'text-sm font-bold text-white mb-2' }, 'Key Sources'),
+      h('div', { className: 'grid grid-cols-1 sm:grid-cols-2 gap-2' }, SOURCES.harness.map((s, i) => h(SourceLink, { key: i, s }))),
+    ),
+  );
+}
+
+function MemoryPage() {
+  return h(Section, null,
+    h('div', { className: 'text-xs font-mono text-slate-500 uppercase tracking-widest mb-4' }, 'Pillar 4 — Memory'),
+    h('h1', { className: 'text-3xl sm:text-4xl font-extrabold text-white mb-2' }, 'Memory Architecture'),
+    h('p', { className: 'text-slate-400 mb-8' }, 'Agent-readable, cross-platform persistent memory as a compounding organizational asset.'),
+
+    h('div', { className: 'p-5 rounded-xl bg-slate-900/50 border border-amber-500/20 mb-8' },
+      h('h2', { className: 'text-lg font-bold text-amber-400 mb-3' }, 'The Problem: Five Sticky Notes on Five Desks'),
+      h('p', { className: 'text-sm text-slate-400 leading-relaxed mb-3' },
+        'Claude\'s memory doesn\'t know what you told ChatGPT. ChatGPT\'s memory doesn\'t follow you into Cursor. Every platform has built a walled garden. Digital workers toggle between applications 1,200 times per day (HBR), losing ~4 hours/week to context switching alone. Memory is supposed to create lock-in, and it works.'
+      ),
+      h('div', { className: 'flex gap-2' },
+        h('a', { href: 'https://hbr.org/2022/08/how-much-time-and-energy-do-we-waste-toggling-between-applications', target: '_blank', className: 'text-xs text-amber-400 hover:text-amber-300' }, 'HBR Study →'),
+        h('a', { href: 'https://techcrunch.com/2025/10/28/mem0-raises-24m-from-yc-peak-xv-and-basis-set-to-build-the-memory-layer-for-ai-apps/', target: '_blank', className: 'text-xs text-amber-400 hover:text-amber-300' }, 'Mem0 $24M Market Validation →'),
+      ),
+    ),
+
+    h('h2', { className: 'text-xl font-bold text-white mb-4' }, 'Open Brain: Base Architecture'),
+    h('div', { className: 'space-y-2 mb-8' },
+      ...['Capture — Any MCP-compatible client writes thoughts (Slack, terminal, browser)',
+          'Processing — Parallel: embedding generation + LLM metadata extraction',
+          'Storage — PostgreSQL + pgvector (semantic vectors + structured metadata)',
+          'Retrieval — MCP Server: semantic_search, list_recent, stats, graph_query',
+          'Consumption — Any MCP client reads: Claude, ChatGPT, Cursor, agents',
+      ].map((l, i) => h('div', { key: i, className: 'flex gap-3 items-stretch' },
+        h('div', { className: 'w-2 rounded-full bg-amber-500' }),
+        h('div', { className: 'flex-1 p-3 rounded-lg bg-slate-800/40 border border-slate-700/40 text-sm text-slate-300' }, l),
+      ))
+    ),
+
+    h('h2', { className: 'text-xl font-bold text-white mb-4' }, 'Our Innovations Beyond the Base'),
+    h('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-4 mb-8' },
+      ...[
+        { title: 'Hybrid Retrieval', desc: 'Semantic + BM25 + GraphRAG with reciprocal rank fusion. 15-30% better retrieval than any single method.' },
+        { title: 'Agent Write-Back Loop', desc: 'Agents write discoveries back to the brain, creating a self-reinforcing flywheel where each retrieval is richer.' },
+        { title: 'Multi-Tier Memory', desc: 'Hot (session) → Warm (days) → Cool (months) → Cold (archive). Mirrors human cognition instead of flat storage.' },
+        { title: 'Local-First Embedding', desc: 'Ollama eliminates API dependency. Zero ongoing cost. Data never leaves your infrastructure.' },
+        { title: 'Knowledge Topology', desc: 'Personal → Team → Department → Organization scopes with RBAC. Agents access the right scope automatically.' },
+        { title: 'Enterprise MCP Interface', desc: '8 tools: semantic_search, exact_search, graph_query, capture_thought, link_thoughts, create_synthesis, weekly_digest, knowledge_health.' },
+      ].map((c, i) => h('div', { key: i, className: 'p-4 rounded-lg bg-slate-900/50 border border-slate-800/60' },
+        h('h3', { className: 'font-semibold text-amber-400 text-sm mb-1' }, c.title),
+        h('p', { className: 'text-xs text-slate-400' }, c.desc),
+      ))
+    ),
+
+    h('div', null,
+      h('h3', { className: 'text-sm font-bold text-white mb-2' }, 'Key Sources'),
+      h('div', { className: 'grid grid-cols-1 sm:grid-cols-2 gap-2' }, SOURCES.memory.map((s, i) => h(SourceLink, { key: i, s }))),
+    ),
+  );
+}
+
+function DisciplinesPage() {
+  return h(Section, null,
+    h('div', { className: 'text-xs font-mono text-slate-500 uppercase tracking-widest mb-4' }, 'Pillar 5 — Human Skill Stack'),
+    h('h1', { className: 'text-3xl sm:text-4xl font-extrabold text-white mb-2' }, 'The Four Disciplines'),
+    h('p', { className: 'text-slate-400 mb-8' }, 'Prompting has split into four skills operating at different altitudes. They build on each other — skipping levels creates enterprise-scale failures.'),
+
+    h('div', { className: 'space-y-6 mb-8' },
+      ...[
+        { level: 'L1', name: 'Prompt Craft', status: 'Table Stakes', time: 'Seconds–minutes', desc: 'Structuring clear instructions with examples, guardrails, output format, and ambiguity resolution. Well-documented by Anthropic, OpenAI, Google. Necessary but no longer differentiating.', color: 'slate' },
+        { level: 'L2', name: 'Context Engineering', status: 'Current Focus', time: 'Minutes–hours', desc: 'Curating the optimal token set for an LLM task. Your 200-token prompt lands in a million-token context window — your prompt is 0.02% of what the model sees. The other 99.98% is context engineering: CLAUDE.md files, MCP connections, RAG pipelines, memory systems.', color: 'blue' },
+        { level: 'L3', name: 'Intent Engineering', status: 'Emerging', time: 'Hours–days', desc: 'Encoding organizational purpose, goals, trade-off hierarchies, and decision boundaries into infrastructure agents can act against. Klarna optimized for speed instead of satisfaction — that\'s an intent engineering failure. Strategy sits above tactics.', color: 'violet' },
+        { level: 'L4', name: 'Specification Engineering', status: 'Frontier', time: 'Days–weeks', desc: 'Writing complete, structured descriptions of outcomes that autonomous agents execute against over extended time horizons. Treating your entire organizational document corpus as agent-fungible specifications. The highest-leverage skill for 2026.', color: 'amber' },
+      ].map((d, i) => h('div', { key: i, className: 'rounded-xl overflow-hidden border border-slate-800/60' },
+        h('div', { className: `px-5 py-3 flex items-center justify-between ${d.color === 'slate' ? 'bg-slate-800/40' : d.color === 'blue' ? 'bg-blue-900/20' : d.color === 'violet' ? 'bg-violet-900/20' : 'bg-amber-900/20'}` },
+          h('div', { className: 'flex items-center gap-3' },
+            h('span', { className: 'text-xs font-mono text-slate-500' }, d.level),
+            h('span', { className: 'font-bold text-white' }, d.name),
+          ),
+          h('div', { className: 'flex items-center gap-3' },
+            h('span', { className: 'text-xs text-slate-500' }, d.time),
+            h('span', { className: `text-xs px-2 py-0.5 rounded ${d.color === 'slate' ? 'bg-slate-700 text-slate-300' : d.color === 'blue' ? 'bg-blue-600/20 text-blue-300' : d.color === 'violet' ? 'bg-violet-600/20 text-violet-300' : 'bg-amber-600/20 text-amber-300'}` }, d.status),
+          ),
+        ),
+        h('div', { className: 'px-5 py-4 bg-slate-900/30' },
+          h('p', { className: 'text-sm text-slate-400 leading-relaxed' }, d.desc),
+        ),
+      ))
+    ),
+
+    h('h2', { className: 'text-xl font-bold text-white mb-4' }, 'The Five Specification Primitives'),
+    h('div', { className: 'space-y-3 mb-8' },
+      ...[
+        { name: 'Self-Contained Problem Statements', desc: 'State a problem with enough context that the task is plausibly solvable without the agent going out for more. Surfaces hidden assumptions, forces clarity.' },
+        { name: 'Acceptance Criteria', desc: 'Write 3 sentences an independent observer could use to verify the output without asking any questions. If you can\'t, you don\'t understand the task well enough to delegate.' },
+        { name: 'Constraint Architecture', desc: 'Musts, must-nots, preferences, escalation triggers. Write down what a smart person might do that would technically satisfy the request but produce the wrong outcome.' },
+        { name: 'Decomposition', desc: 'Break multi-day projects into <2-hour subtasks with clear I/O boundaries, independently verifiable. This is the granularity agents work best at.' },
+        { name: 'Evaluation Design', desc: 'Convert subjective quality judgments into measurable proxies. If the agent can\'t measure it, it can\'t improve it.' },
+      ].map((p, i) => h('div', { key: i, className: 'flex gap-3 items-start p-4 rounded-lg bg-slate-800/30 border border-slate-700/30' },
+        h('div', { className: 'w-6 h-6 rounded-full bg-amber-600/20 text-amber-400 flex items-center justify-center text-xs font-bold shrink-0' }, i + 1),
+        h('div', null,
+          h('div', { className: 'font-semibold text-sm text-white mb-1' }, p.name),
+          h('p', { className: 'text-xs text-slate-400' }, p.desc),
+        ),
+      ))
+    ),
+
+    h('div', null,
+      h('h3', { className: 'text-sm font-bold text-white mb-2' }, 'Key Sources'),
+      h('div', { className: 'grid grid-cols-1 sm:grid-cols-2 gap-2' }, SOURCES.disciplines.map((s, i) => h(SourceLink, { key: i, s }))),
+    ),
+  );
+}
+
+function AlignmentPage() {
+  return h(Section, null,
+    h('div', { className: 'text-xs font-mono text-slate-500 uppercase tracking-widest mb-4' }, 'Strategic Framework'),
+    h('h1', { className: 'text-3xl sm:text-4xl font-extrabold text-white mb-2' }, 'Penta-Alignment Framework'),
+    h('p', { className: 'text-slate-400 mb-8' }, 'Five pillars that must co-evolve for effective enterprise AI architecture.'),
+
+    h('div', { className: 'grid grid-cols-1 sm:grid-cols-5 gap-3 mb-8' },
+      ...[
+        { name: 'Organization', items: ['Decision authority', 'Governance tiers', 'Workflow ownership'], color: 'blue' },
+        { name: 'Personnel', items: ['Role design', 'Task routing', 'Performance frameworks'], color: 'emerald' },
+        { name: 'Infrastructure', items: ['Harness design', 'Model gateway', 'Multi-agent orchestration'], color: 'violet' },
+        { name: 'Memory', items: ['Open Brain', 'Knowledge topology', 'Cross-platform persistence'], color: 'amber' },
+        { name: 'Skill Stack', items: ['Prompt craft', 'Context engineering', 'Intent engineering', 'Spec engineering'], color: 'rose' },
+      ].map((p, i) => h('div', { key: i, className: `p-4 rounded-xl border ${p.color === 'blue' ? 'border-blue-500/20 bg-blue-900/10' : p.color === 'emerald' ? 'border-emerald-500/20 bg-emerald-900/10' : p.color === 'violet' ? 'border-violet-500/20 bg-violet-900/10' : p.color === 'amber' ? 'border-amber-500/20 bg-amber-900/10' : 'border-rose-500/20 bg-rose-900/10'}` },
+        h('h3', { className: `text-sm font-bold mb-2 ${p.color === 'blue' ? 'text-blue-400' : p.color === 'emerald' ? 'text-emerald-400' : p.color === 'violet' ? 'text-violet-400' : p.color === 'amber' ? 'text-amber-400' : 'text-rose-400'}` }, p.name),
+        h('div', { className: 'space-y-1' }, p.items.map((item, j) => h('div', { key: j, className: 'text-xs text-slate-400 p-1.5 rounded bg-slate-800/30' }, item))),
+      ))
+    ),
+
+    h('h2', { className: 'text-xl font-bold text-white mb-4' }, 'Alignment Interfaces'),
+    h('p', { className: 'text-sm text-slate-400 mb-4' }, 'Each pair of pillars has an alignment interface. Misalignment at any interface creates organizational friction.'),
+    h('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-2 mb-8' },
+      ...[
+        { from: 'Org', to: 'Personnel', label: 'Role Design', desc: 'Org defines needed roles; personnel strategy fills them' },
+        { from: 'Org', to: 'Infrastructure', label: 'Governance Binding', desc: 'Authority boundaries define agent autonomy limits' },
+        { from: 'Org', to: 'Memory', label: 'Knowledge Topology', desc: 'Org structure defines memory scope and access tiers' },
+        { from: 'Personnel', to: 'Infrastructure', label: 'Capability Mapping', desc: 'Skills determine human vs. agent task routing' },
+        { from: 'Personnel', to: 'Memory', label: 'Context Engineering', desc: 'Personnel build and curate institutional memory' },
+        { from: 'Personnel', to: 'Skills', label: 'Development Path', desc: 'Personnel progress through L1→L4 discipline stack' },
+        { from: 'Infrastructure', to: 'Memory', label: 'State Persistence', desc: 'Harness reads/writes memory for cross-session continuity' },
+        { from: 'Infrastructure', to: 'Skills', label: 'Spec Integration', desc: 'Specifications feed planner-worker orchestration' },
+        { from: 'Memory', to: 'Skills', label: 'Compounding', desc: 'Stored specifications become reusable organizational assets' },
+        { from: 'Org', to: 'Skills', label: 'Culture Shift', desc: 'Org must value specification clarity as a leadership competency' },
+      ].map((a, i) => h('div', { key: i, className: 'flex items-start gap-3 p-3 rounded-lg bg-slate-800/30 border border-slate-700/30' },
+        h('div', { className: 'text-xs font-mono text-blue-400 min-w-[90px] shrink-0' }, `${a.from} ↔ ${a.to}`),
+        h('div', null,
+          h('span', { className: 'text-xs font-semibold text-white' }, a.label + ': '),
+          h('span', { className: 'text-xs text-slate-400' }, a.desc),
+        ),
+      ))
+    ),
+
+    h('h2', { className: 'text-xl font-bold text-white mb-4' }, 'Emerging Roles'),
+    h('div', { className: 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3' },
+      ...[
+        { role: 'Harness Engineer', desc: 'Designs execution environment, tool integration, and state management across collaborator and contractor architectures.' },
+        { role: 'Context Engineer', desc: 'Maintains CLAUDE.md files, RAG pipelines, MCP server configs. Cross-functional role: IT + domain expertise.' },
+        { role: 'Specification Engineer', desc: 'Maintains organizational document standards for agent readability. Highest-leverage new role.' },
+        { role: 'Intent Architect', desc: 'Translates business strategy into agent-readable decision frameworks. Senior role bridging product and AI.' },
+        { role: 'Agent Manager', desc: 'Supervises AI agent workflows, monitors performance, handles escalations. Team lead for AI workers.' },
+        { role: 'MCP Architect', desc: 'Designs tool exposure via MCP, progressive disclosure, token economics.' },
+      ].map((r, i) => h('div', { key: i, className: 'p-4 rounded-lg bg-slate-900/50 border border-slate-800/60' },
+        h('div', { className: 'font-semibold text-sm text-emerald-400 mb-1' }, r.role),
+        h('p', { className: 'text-xs text-slate-400' }, r.desc),
+      ))
+    ),
+  );
+}
+
+function RoadmapPage() {
+  const phases = [
+    { name: 'Phase 0: Foundation', time: 'Weeks 1–4', color: 'slate', items: [
+      'Deploy Open Brain (PostgreSQL + pgvector + MCP server)',
+      'All personnel complete L1 Prompt Craft baseline assessment',
+      'Document existing organizational specifications and decision frameworks',
+      'Establish model-agnostic gateway layer',
+      'Begin CLAUDE.md / institutional memory creation for top 3 workflows',
+      'Run memory migration from existing platform memories',
+    ]},
+    { name: 'Phase 1: Context & Memory', time: 'Months 2–3', color: 'blue', items: [
+      'Train personnel on L2 Context Engineering',
+      'Upgrade Open Brain: hybrid retrieval + agent write-back loop',
+      'Select harness philosophy per department',
+      'Build knowledge topology (personal → team → dept → org)',
+      'Deploy prompt caching and tiered model routing',
+      'Assign first Context Engineers and Harness Engineers',
+    ]},
+    { name: 'Phase 2: Intent & Governance', time: 'Months 3–5', color: 'violet', items: [
+      'Train managers on L3 Intent Engineering',
+      'Implement bounded autonomy tiers aligned to org authority',
+      'Deploy governance agents for compliance monitoring',
+      'Build intent verification checkpoints',
+      'Create Klarna-prevention framework (intent misalignment detection)',
+      'Assign Intent Architects',
+    ]},
+    { name: 'Phase 3: Specification & Scale', time: 'Months 5–8', color: 'amber', items: [
+      'Train leadership on L4 Specification Engineering (5 primitives)',
+      'Audit organizational docs for agent readability — begin conversion',
+      'Deploy planner-worker orchestration',
+      'Build automated specification quality scoring',
+      'Implement the Lutke feedback loop (human communication measurement)',
+      'Store successful specifications in Open Brain as compounding assets',
+    ]},
+    { name: 'Phase 4: Compounding', time: 'Months 8–12+', color: 'emerald', items: [
+      'Full Penta-Alignment operating as integrated system',
+      'Measure weekly improvement curves across all five pillars',
+      'Build switching cost analysis for lock-in management',
+      'Scale successful patterns across entire organization',
+      'Knowledge graph visualization of organizational thinking',
+      'Continuous evolution of spec library, constraints, decomposition templates',
+    ]},
+  ];
+
+  return h(Section, null,
+    h('div', { className: 'text-xs font-mono text-slate-500 uppercase tracking-widest mb-4' }, 'Implementation'),
+    h('h1', { className: 'text-3xl sm:text-4xl font-extrabold text-white mb-2' }, 'Strategic Roadmap'),
+    h('p', { className: 'text-slate-400 mb-8' }, '12-month phased deployment integrating all five alignment pillars.'),
+
+    h('div', { className: 'space-y-6 mb-8' },
+      ...phases.map((p, i) => h('div', { key: i, className: `rounded-xl border overflow-hidden ${p.color === 'slate' ? 'border-slate-700/40' : p.color === 'blue' ? 'border-blue-500/20' : p.color === 'violet' ? 'border-violet-500/20' : p.color === 'amber' ? 'border-amber-500/20' : 'border-emerald-500/20'}` },
+        h('div', { className: `px-5 py-3 flex items-center justify-between ${p.color === 'slate' ? 'bg-slate-800/30' : p.color === 'blue' ? 'bg-blue-900/15' : p.color === 'violet' ? 'bg-violet-900/15' : p.color === 'amber' ? 'bg-amber-900/15' : 'bg-emerald-900/15'}` },
+          h('h3', { className: 'font-bold text-white text-sm' }, p.name),
+          h('span', { className: 'text-xs text-slate-500' }, p.time),
+        ),
+        h('div', { className: 'p-5 bg-slate-900/20 grid grid-cols-1 md:grid-cols-2 gap-2' },
+          ...p.items.map((item, j) => h('div', { key: j, className: 'text-xs text-slate-300 p-2 rounded bg-slate-800/30' }, item))
+        ),
+      ))
+    ),
+
+    h('div', { className: 'p-6 rounded-xl bg-slate-900/50 border border-slate-800/60' },
+      h('h2', { className: 'text-lg font-bold text-white mb-3' }, 'Critical Success Factors'),
+      h('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-3' },
+        ...[
+          { title: 'Don\'t start with the model', desc: 'Start with the harness philosophy that matches how your teams work. The model is the brain in a jar.' },
+          { title: 'Price in switching costs', desc: 'Every quarter your team builds more around the current architecture. The cost to change goes up every quarter.' },
+          { title: 'Align all five pillars', desc: 'Org, personnel, infrastructure, memory, and skills must evolve together. Misalignment creates friction.' },
+          { title: 'Invest in institutional memory', desc: 'CLAUDE.md files, specifications, constraint patterns — context that compounds is your strategic asset.' },
+        ].map((f, i) => h('div', { key: i, className: 'p-3 rounded-lg bg-slate-800/30 border border-slate-700/30' },
+          h('div', { className: 'font-semibold text-sm text-red-400 mb-1' }, f.title),
+          h('p', { className: 'text-xs text-slate-400' }, f.desc),
+        ))
+      ),
+    ),
+  );
+}
+
+function SourcesPage() {
+  const categories = [
+    { name: 'Harness Architecture', sources: SOURCES.harness },
+    { name: 'Model Context Protocol (MCP)', sources: SOURCES.mcp },
+    { name: 'Memory Architecture', sources: SOURCES.memory },
+    { name: 'Prompting Disciplines', sources: SOURCES.disciplines },
+    { name: 'Enterprise & Market Data', sources: SOURCES.enterprise },
+  ];
+
+  return h(Section, null,
+    h('div', { className: 'text-xs font-mono text-slate-500 uppercase tracking-widest mb-4' }, 'Reference'),
+    h('h1', { className: 'text-3xl sm:text-4xl font-extrabold text-white mb-2' }, 'Research Sources'),
+    h('p', { className: 'text-slate-400 mb-8' }, 'All claims verified against primary sources. 38 sources across 5 categories.'),
+
+    h('div', { className: 'space-y-8' },
+      ...categories.map((cat, i) => h('div', { key: i },
+        h('h2', { className: 'text-lg font-bold text-white mb-3' }, cat.name),
+        h('div', { className: 'grid grid-cols-1 sm:grid-cols-2 gap-2' },
+          ...cat.sources.map((s, j) => h(SourceLink, { key: j, s }))
+        ),
+      ))
+    ),
+  );
+}
+
+// ─── App ─────────────────────────────────────────────────────────────────────
+
+const PAGE_MAP = {
+  overview: OverviewPage,
+  philosophy: PhilosophyPage,
+  harness: HarnessPage,
+  memory: MemoryPage,
+  disciplines: DisciplinesPage,
+  alignment: AlignmentPage,
+  roadmap: RoadmapPage,
+  sources: SourcesPage,
+};
+
+function App() {
+  const [page, setPage] = useState(() => {
+    const hash = window.location.hash.slice(1);
+    return PAGE_MAP[hash] ? hash : 'overview';
+  });
+
+  const navigate = useCallback((id) => {
+    setPage(id);
+    window.location.hash = id;
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const handler = () => {
+      const hash = window.location.hash.slice(1);
+      if (PAGE_MAP[hash]) setPage(hash);
+    };
+    window.addEventListener('hashchange', handler);
+    return () => window.removeEventListener('hashchange', handler);
+  }, []);
+
+  const PageComponent = PAGE_MAP[page];
+
+  return h('div', { className: 'min-h-screen' },
+    h(Nav, { active: page, onNav: navigate }),
+    h('main', { className: 'max-w-5xl mx-auto px-4 sm:px-6 pt-20 pb-16' },
+      h(PageComponent, { onNav: navigate }),
+    ),
+    h('footer', { className: 'border-t border-slate-800/60 mt-8' },
+      h('div', { className: 'max-w-5xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3' },
+        h('div', { className: 'text-xs text-slate-600' }, 'FLUX AGENTIC — Penta-Alignment Framework v3.0'),
+        h('div', { className: 'text-xs text-slate-600' }, '18 claims verified • 38 sources • 3 analyses synthesized • March 2026'),
+      ),
+    ),
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+
+</script>
+</body>
+</html>
