@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UT — Utah Department of Agriculture and Food — Agriculture Grant Resources</title>
+<style>
+  :root {
+    --green-900: #1a3a1a;
+    --green-700: #2d5a2d;
+    --green-600: #3a7a3a;
+    --green-100: #e8f5e8;
+    --green-50: #f0faf0;
+    --gold-600: #b8860b;
+    --gold-100: #fef9e7;
+    --red-600: #c0392b;
+    --red-100: #fdecea;
+    --gray-50: #f8f9fa;
+    --gray-100: #e9ecef;
+    --gray-200: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-600: #6c757d;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    --shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.08);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,.1);
+    --radius: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--gray-50); color: var(--gray-900);
+    line-height: 1.6;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--green-900) 0%, var(--green-700) 100%);
+    color: #fff; padding: 3rem 2rem; text-align: center;
+  }
+  .hero h1 { margin: 0 0 .5rem; font-size: 2.2rem; font-weight: 700; }
+  .hero p { margin: 0; opacity: .85; font-size: 1.1rem; }
+  .hero a { color: #fff; }
+  .hero .stats {
+    display: flex; gap: 2rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap;
+  }
+  .hero .stat { text-align: center; }
+  .hero .stat-num { font-size: 2rem; font-weight: 700; display: block; }
+  .hero .stat-label { font-size: .85rem; opacity: .7; text-transform: uppercase; letter-spacing: .05em; }
+  .hero-compact { padding: 2rem 2rem 1.5rem; }
+  .hero-compact h1 { font-size: 1.8rem; }
+
+  /* Page nav (inter-page links) */
+  .page-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #fff; border-bottom: 1px solid var(--gray-200);
+    display: flex; justify-content: center; gap: 0; box-shadow: var(--shadow);
+  }
+  .page-nav a {
+    display: inline-block; padding: 1rem 2rem; text-decoration: none;
+    font-size: 1rem; font-weight: 500; color: var(--gray-600);
+    border-bottom: 3px solid transparent; transition: all .2s;
+  }
+  .page-nav a:hover { color: var(--green-700); }
+  .page-nav a.active { color: var(--green-700); border-bottom-color: var(--green-600); }
+
+  /* Filter bar */
+  .filter-bar {
+    max-width: 1200px; margin: 1.5rem auto; padding: 0 1.5rem;
+    display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+  }
+  .filter-bar input, .filter-bar select {
+    padding: .6rem 1rem; border: 1px solid var(--gray-400); border-radius: var(--radius);
+    font-size: .95rem; background: #fff;
+  }
+  .filter-bar input { flex: 1; min-width: 200px; }
+  .filter-bar select { min-width: 140px; }
+  .result-count { font-size: .85rem; color: var(--gray-600); margin-left: auto; }
+
+  /* Badges */
+  .badge {
+    display: inline-block; font-size: .7rem; font-weight: 600; padding: .15rem .5rem;
+    border-radius: 4px; text-transform: uppercase; letter-spacing: .03em; margin-left: .5rem;
+    vertical-align: middle;
+  }
+  .badge-open { background: var(--green-100); color: var(--green-700); }
+  .badge-closed { background: var(--red-100); color: var(--red-600); }
+  .badge-unknown { background: var(--gray-100); color: var(--gray-600); }
+  .badge-error { background: var(--red-100); color: var(--red-600); }
+  .badge-none { background: var(--gray-100); color: var(--gray-600); }
+  .badge-review { background: var(--gold-100); color: var(--gold-600); }
+
+  .timestamp { text-align: center; padding: 2rem; color: var(--gray-600); font-size: .85rem; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 1.5rem; }
+    .hero .stats { gap: 1rem; }
+    .page-nav a { padding: .75rem 1rem; font-size: .85rem; }
+    .filter-bar { flex-direction: column; }
+    .filter-bar input { min-width: 100%; }
+  }
+  .section { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+  .grant-item { padding: .75rem 0; border-top: 1px solid var(--gray-100); }
+  .grant-item:first-child { border-top: none; }
+  .grant-title { font-weight: 500; }
+  .grant-title a { color: var(--green-700); text-decoration: none; }
+  .grant-title a:hover { text-decoration: underline; }
+  .grant-meta { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .25rem; }
+  .meta-tag {
+    font-size: .8rem; background: var(--gray-100); color: var(--gray-800);
+    padding: .15rem .5rem; border-radius: 4px; word-break: break-word;
+  }
+  .docs { margin-top: .5rem; font-size: .85rem; }
+  .docs ul { margin: .25rem 0 0; padding-left: 1.2rem; }
+  .docs li { margin-bottom: .15rem; }
+  .docs a { color: var(--green-700); }
+  .error-msg { color: var(--red-600); font-size: .95rem; margin: 1rem 0; }
+  .grant-ambiguous {
+    background: var(--gold-100); border-radius: 4px;
+    padding: .75rem .5rem; margin: .25rem -.5rem;
+  }
+  .crawl-stats {
+    font-size: .85rem; color: var(--gray-600); font-style: italic; margin: .5rem 0 1rem;
+  }
+  .grants-section {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 1.25rem; border-left: 4px solid var(--green-600); margin-bottom: 1.5rem;
+  }
+  .grants-section h2 { margin: 0 0 .75rem; font-size: 1.2rem; color: var(--green-700); }
+
+  /* Discovery path */
+  .discovery-info {
+    margin-top: .5rem; font-size: .85rem; color: var(--gray-600);
+  }
+  .discovery-path ol {
+    margin: .25rem 0 0; padding-left: 1.5rem; font-size: .8rem;
+  }
+  .discovery-path li { margin-bottom: .15rem; word-break: break-all; }
+  .discovery-path a { color: var(--gray-600); }
+
+  /* Urban resources section */
+  .urban-section {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+    margin-bottom: 1.5rem; padding: 1.25rem; border-left: 4px solid var(--gold-600);
+  }
+  .urban-section h2 { margin: 0 0 .75rem; font-size: 1.2rem; color: var(--gold-600); }
+  .urban-item { padding: .5rem 0; border-top: 1px solid var(--gray-100); }
+  .urban-item:first-child { border-top: none; }
+  .urban-item a { color: var(--green-700); text-decoration: none; font-weight: 500; }
+  .urban-item a:hover { text-decoration: underline; }
+  .urban-context { font-size: .85rem; color: var(--gray-600); margin: .25rem 0 0; }
+  .urban-keywords { display: flex; gap: .25rem; flex-wrap: wrap; margin-top: .25rem; }
+  .urban-keyword {
+    font-size: .7rem; background: var(--gold-100); color: var(--gold-600);
+    padding: .1rem .4rem; border-radius: 3px; font-weight: 600;
+  }
+
+  /* National orgs */
+  .national-orgs {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+    margin-bottom: 1.5rem; padding: 1.25rem; border-left: 4px solid #4a90d9;
+  }
+  .national-orgs h2 { margin: 0 0 .75rem; font-size: 1.2rem; color: #4a90d9; }
+  .national-orgs .org-card {
+    padding: .75rem 0; border-top: 1px solid var(--gray-100);
+  }
+  .national-orgs .org-card:first-child { border-top: none; }
+  .national-orgs .org-name { font-weight: 600; }
+  .national-orgs .org-name a { color: var(--green-700); text-decoration: none; }
+  .national-orgs .org-name a:hover { text-decoration: underline; }
+  .national-orgs .org-resources { margin-top: .25rem; padding-left: 1rem; font-size: .9rem; }
+  .national-orgs .org-resources li { margin-bottom: .2rem; }
+  .national-orgs .org-resources a { color: var(--green-700); text-decoration: none; }
+  .national-orgs .org-resources a:hover { text-decoration: underline; }
+
+  .back-link {
+    display: inline-block; margin-bottom: 1rem; color: var(--green-700);
+    text-decoration: none; font-size: .9rem; font-weight: 500;
+  }
+  .back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="hero hero-compact">
+  <h1>UT — Utah Department of Agriculture and Food</h1>
+  <p><a href="https://ag.utah.gov" target="_blank" rel="noopener">https://ag.utah.gov</a></p>
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-num">7</span>
+      <span class="stat-label">Grants Found</span>
+    </div>
+    
+    
+    
+    
+  </div>
+</div>
+
+
+<div class="page-nav">
+  <a href="../index.html" class="">Home</a>
+  <a href="../state-grants.html" class="active">State Grants</a>
+  <a href="../federal-grants.html" class="">Federal Grants</a>
+</div>
+
+<div class="section">
+  <a href="../state-grants.html" class="back-link">&larr; Back to all states</a>
+
+  
+  
+
+  
+  <div class="grants-section">
+    <h2>Grant References (7)</h2>
+    
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://ag.utah.gov/marketing-and-economic-development/utah-food-security-grant/" target="_blank" rel="noopener">Learn more and apply</a>
+        <span class="badge badge-unknown">Unknown</span>
+      </div>
+      <div class="grant-meta">
+        <span class="meta-tag">Amounts: $9,265,098.80, $1,000,000, $1,000.00, $10,000, $200,000.00, $10,000.00, $50,000.00, $1,000,000.00, $8,865,098.80, $50,000,000</span>
+        
+      </div>
+      <div class="docs"><strong>Documents (13):</strong><ul><li><a href="https://ag.utah.gov/marketing-and-economic-development/utah-food-security-grant/#cycle" target="_blank" rel="noopener">Application Cycle</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/FINAL-2026-UFSG-RFA.pdf" target="_blank" rel="noopener">Request for Applications (RFA)</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/FINAL-2026-UFSG-RFA.pdf" target="_blank" rel="noopener">Request for Applications (RFA)</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/FINAL-2026-UFSG-RFA.pdf" target="_blank" rel="noopener">Request for Applications (RFA)</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/2026-UFSG-Scoring-Sheet.pdf" target="_blank" rel="noopener">scoring criteria</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/FINAL-2026-RHTP-RFA.docx.pdf" target="_blank" rel="noopener">Request for Applications (RFA)</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/FINAL-2026-UFSG-RFA.pdf" target="_blank" rel="noopener">Request for Applications (RFA)</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/2026-UFSG-Scoring-Sheet.pdf" target="_blank" rel="noopener">Scoring Sheet</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/2026-Utah-Food-Security-Handout-V3.pdf" target="_blank" rel="noopener">Program Overview One-pager</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/PRINT-Utah-Food-Security-Grant-Half-Page-7.20.26-1.pdf" target="_blank" rel="noopener">Program Overview Postcard</a></li><li><a href="https://ag.utah.gov/applications-and-payments/" target="_blank" rel="noopener">Applications and Payments</a></li><li><a href="https://ag.utah.gov/applications-and-payments/applications-for-new-licenses-permits-and-registrations/" target="_blank" rel="noopener">Applications for New Licenses, Permits, and Registrations</a></li><li><a href="https://ag.utah.gov/applications-and-payments/applications-for-new-licenses-permits-and-registrations/" target="_blank" rel="noopener">Applications for New Licenses, Permits, and Registrations</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://ag.utah.gov/grants-and-loans/" target="_blank" rel="noopener">Grants &amp; loans</a>
+        <span class="badge badge-closed">Closed</span>
+      </div>
+      <div class="grant-meta">
+        
+        
+      </div>
+      <div class="docs"><strong>Documents (5):</strong><ul><li><a href="https://ag.utah.gov/wp-content/uploads/UEI-Registration-SOP.docx-1-1.pdf" target="_blank" rel="noopener">Flyer Guide to Getting a Unique Entity Identifier</a></li><li><a href="https://www.ams.usda.gov/sites/default/files/media/LocalandRegionalFoodSystemResourceGuide.pdf" target="_blank" rel="noopener">Local and Regional Food Systems Resource Guide</a></li><li><a href="https://ag.utah.gov/applications-and-payments/" target="_blank" rel="noopener">Applications and Payments</a></li><li><a href="https://ag.utah.gov/applications-and-payments/applications-for-new-licenses-permits-and-registrations/" target="_blank" rel="noopener">Applications for New Licenses, Permits, and Registrations</a></li><li><a href="https://ag.utah.gov/applications-and-payments/applications-for-new-licenses-permits-and-registrations/" target="_blank" rel="noopener">Applications for New Licenses, Permits, and Registrations</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://ag.utah.gov/conservation/agricultural-voluntary-incentive-program/" target="_blank" rel="noopener">Agricultural Voluntary Incentive Program</a>
+        <span class="badge badge-closed">Closed</span>
+      </div>
+      <div class="grant-meta">
+        <span class="meta-tag">Amounts: $1,000, $10, $20, $5, $2,000, $75,000</span>
+        
+      </div>
+      <div class="docs"><strong>Documents (4):</strong><ul><li><a href="https://utahsoilhealth.org/" target="_blank" rel="noopener">Utah Soil Health Partnership Website Resources for farmers implementing positive soil health practices. Soil health testing, plans &amp; principles, grant applications, Utah Soil Health Partnership contact &amp; project information.</a></li><li><a href="https://ag.utah.gov/applications-and-payments/" target="_blank" rel="noopener">Applications and Payments</a></li><li><a href="https://ag.utah.gov/applications-and-payments/applications-for-new-licenses-permits-and-registrations/" target="_blank" rel="noopener">Applications for New Licenses, Permits, and Registrations</a></li><li><a href="https://ag.utah.gov/applications-and-payments/applications-for-new-licenses-permits-and-registrations/" target="_blank" rel="noopener">Applications for New Licenses, Permits, and Registrations</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://ag.utah.gov/conservation/leray-mcallister-working-farm-and-ranch-fund/" target="_blank" rel="noopener">LeRay McAllister Working Farm and Ranch Fund</a>
+        <span class="badge badge-unknown">Unknown</span>
+      </div>
+      <div class="grant-meta">
+        <span class="meta-tag">Amounts: $27,413,016, $201,738,5092</span>
+        
+      </div>
+      <div class="docs"><strong>Documents (7):</strong><ul><li><a href="https://ag.utah.gov/wp-content/uploads/LeRay_McAllister_NOFO_FY2026_Final.docx.pdf" target="_blank" rel="noopener">2026 Notice of Funding Opportunity</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/2026-Grant-Manual-Final.docx.pdf" target="_blank" rel="noopener">2026 Grant Manual</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/Landowner-Notice-Request-for-Consent-to-Local-Land-Use-Authority.pdf" target="_blank" rel="noopener">Landowner Notice Form</a></li><li><a href="https://accounts.submittable.com/u/login/identifier?state=hqFo2SBpUmRzQlB1eEdYSE9GbzhLakhIcHhZaVR0b0tLc21ETqFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIFAxWDE4VmtJNXNQMFR4UnFlc0dMMDZ2M1diRnlnVzd0o2NpZNkgRmZpZ1l1TFp1VFVQdkNKQktxWlBOcHIzMzBtRk1lM3Olb3JnaWS0b3JnX25kZjBSejJ0VXZvWkdoNjOnb3JnbmFtZdksZ21zLTVjZWZmYmQyLTJjOTYtNDYyNi1iYTc4LWQxNGYyZmJlOTE3OC1lbXA" target="_blank" rel="noopener">Apply Prepare your application to the LeRay McAllister Working Farm and Ranch Fund.</a></li><li><a href="https://ag.utah.gov/applications-and-payments/" target="_blank" rel="noopener">Applications and Payments</a></li><li><a href="https://ag.utah.gov/applications-and-payments/applications-for-new-licenses-permits-and-registrations/" target="_blank" rel="noopener">Applications for New Licenses, Permits, and Registrations</a></li><li><a href="https://ag.utah.gov/applications-and-payments/applications-for-new-licenses-permits-and-registrations/" target="_blank" rel="noopener">Applications for New Licenses, Permits, and Registrations</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://ag.utah.gov/marketing-and-economic-development/specialty-crop-block-grant/" target="_blank" rel="noopener">Specialty Crop Block Grant</a>
+        <span class="badge badge-closed">Closed</span>
+      </div>
+      <div class="grant-meta">
+        <span class="meta-tag">Amounts: $300,000, $350,000, $100,000</span>
+        
+      </div>
+      <div class="docs"><strong>Documents (22):</strong><ul><li><a href="https://www.ams.usda.gov/sites/default/files/media/USDASpecialtyCropDefinition.pdf" target="_blank" rel="noopener">Complete list of eligible specialty crops.</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/FY2021_GD_TermsandConditions.pdf" target="_blank" rel="noopener">Review USDA SCBGP Terms and Conditions for more information on allowable and unallowable costs.</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/2026-SCBG-Scoring-Sheet.pdf" target="_blank" rel="noopener">2026 SCBG Scoring Sheet</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/2026-SCBG-Scoring-Sheet.pdf" target="_blank" rel="noopener">2026 SCBG Scoring Sheet</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/RFA-SCBG-2026.pdf" target="_blank" rel="noopener">2026 Request for Applications - Important Information About the Grant</a></li><li><a href="https://www.ams.usda.gov/sites/default/files/media/SCBGPQuickGuide.pdf" target="_blank" rel="noopener">SCBGP Performance Measure Quick Guide</a></li><li><a href="https://www.ams.usda.gov/sites/default/files/media/FY2024_AMSGeneralTermsandConditions.pdf" target="_blank" rel="noopener">SCGBP Terms and Conditions, including allowable and unallowable costs</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/2026/01/SCBGPDescriptionofFunds2025.pdf" target="_blank" rel="noopener">2025</a></li><li><a href="https://www.ams.usda.gov/sites/default/files/media/SCBGPDescriptionofFunds2024.pdf" target="_blank" rel="noopener">2024</a></li><li><a href="https://www.ams.usda.gov/sites/default/files/media/SCBGPDescriptionofFunds2023.pdf" target="_blank" rel="noopener">2023</a></li><li><a href="https://www.ams.usda.gov/sites/default/files/media/SCBGPDescriptionofFunds2022.pdf" target="_blank" rel="noopener">2022</a></li><li><a href="https://www.ams.usda.gov/sites/default/files/media/SCBGPDescriptionofFunds2021.pdf" target="_blank" rel="noopener">2021 Farm Bill</a></li><li><a href="https://www.ams.usda.gov/sites/default/files/media/SCBGPDescriptionofFundsHR133.pdf" target="_blank" rel="noopener">2021 H.R. 133</a></li><li><a href="https://www.ams.usda.gov/sites/default/files/media/SCBGP_Description_of_Funds_2020.pdf" target="_blank" rel="noopener">2020</a></li><li><a href="https://www.ams.usda.gov/sites/default/files/media/2019SCBGPGrantstotheStates.pdf" target="_blank" rel="noopener">2019</a></li><li><a href="https://www.ams.usda.gov/sites/default/files/media/2018SCBGPGrantstotheStates.pdf" target="_blank" rel="noopener">2018</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/Final-SCBG-Success-Story-Updated.pdf" target="_blank" rel="noopener">Specialty Cut Flowers</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/2026/01/2026-SCBG-Scoring-Sheet.pdf" target="_blank" rel="noopener">Document</a></li><li><a href="https://ag.utah.gov/wp-content/uploads/2024/01/UEI-Registration-SOP.docx-1.pdf" target="_blank" rel="noopener">Document</a></li><li><a href="https://ag.utah.gov/applications-and-payments/" target="_blank" rel="noopener">Applications and Payments</a></li><li><a href="https://ag.utah.gov/applications-and-payments/applications-for-new-licenses-permits-and-registrations/" target="_blank" rel="noopener">Applications for New Licenses, Permits, and Registrations</a></li><li><a href="https://ag.utah.gov/applications-and-payments/applications-for-new-licenses-permits-and-registrations/" target="_blank" rel="noopener">Applications for New Licenses, Permits, and Registrations</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://ag.utah.gov/plant-industry/noxious-weed/invasive-species-mitigation-grant/" target="_blank" rel="noopener">Invasive Species Mitigation Grant</a>
+        
+      </div>
+      <div class="grant-meta">
+        
+        
+      </div>
+      
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        UDAF Launches Historic $11 Million Food Security Grant to Strengthen Utah’s Food System and Expand Access to Local Food
+        
+      </div>
+      <div class="grant-meta">
+        
+        
+      </div>
+      
+      
+    </div>
+  </div>
+
+  
+
+  
+    <div class="national-orgs">
+      <h2>National Urban Agriculture Organizations</h2>
+      <p style="font-size:.9rem;color:var(--gray-600);margin:0 0 .75rem">Federal and national resources for urban farming grants and programs.</p>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.usda.gov/topics/urban" target="_blank" rel="noopener">USDA Urban Agriculture</a></div>
+      </div>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.nifa.usda.gov/topics/urban-agriculture" target="_blank" rel="noopener">NIFA Urban Agriculture</a></div>
+      </div>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.usda.gov/peoples-garden" target="_blank" rel="noopener">USDA People's Garden Initiative</a></div>
+      </div>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.communitygarden.org" target="_blank" rel="noopener">American Community Gardening Association</a></div>
+      </div>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.usda.gov/topics/farming/beginning-farmers" target="_blank" rel="noopener">USDA Beginning Farmers and Ranchers</a></div>
+      </div>
+    </div>
+</div>
+
+
+<div class="timestamp">
+  Data scraped: 2026-08-22T13:07:39.494Z<br>
+  Sources: 50 state agriculture department websites + <a href="https://www.grants.gov" target="_blank">Grants.gov</a>
+</div>
+
+</body>
+</html>

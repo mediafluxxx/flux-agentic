@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Federal Grants (Grants.gov) — Agriculture Grant Resources</title>
+<style>
+  :root {
+    --green-900: #1a3a1a;
+    --green-700: #2d5a2d;
+    --green-600: #3a7a3a;
+    --green-100: #e8f5e8;
+    --green-50: #f0faf0;
+    --gold-600: #b8860b;
+    --gold-100: #fef9e7;
+    --red-600: #c0392b;
+    --red-100: #fdecea;
+    --gray-50: #f8f9fa;
+    --gray-100: #e9ecef;
+    --gray-200: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-600: #6c757d;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    --shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.08);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,.1);
+    --radius: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--gray-50); color: var(--gray-900);
+    line-height: 1.6;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--green-900) 0%, var(--green-700) 100%);
+    color: #fff; padding: 3rem 2rem; text-align: center;
+  }
+  .hero h1 { margin: 0 0 .5rem; font-size: 2.2rem; font-weight: 700; }
+  .hero p { margin: 0; opacity: .85; font-size: 1.1rem; }
+  .hero a { color: #fff; }
+  .hero .stats {
+    display: flex; gap: 2rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap;
+  }
+  .hero .stat { text-align: center; }
+  .hero .stat-num { font-size: 2rem; font-weight: 700; display: block; }
+  .hero .stat-label { font-size: .85rem; opacity: .7; text-transform: uppercase; letter-spacing: .05em; }
+  .hero-compact { padding: 2rem 2rem 1.5rem; }
+  .hero-compact h1 { font-size: 1.8rem; }
+
+  /* Page nav (inter-page links) */
+  .page-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #fff; border-bottom: 1px solid var(--gray-200);
+    display: flex; justify-content: center; gap: 0; box-shadow: var(--shadow);
+  }
+  .page-nav a {
+    display: inline-block; padding: 1rem 2rem; text-decoration: none;
+    font-size: 1rem; font-weight: 500; color: var(--gray-600);
+    border-bottom: 3px solid transparent; transition: all .2s;
+  }
+  .page-nav a:hover { color: var(--green-700); }
+  .page-nav a.active { color: var(--green-700); border-bottom-color: var(--green-600); }
+
+  /* Filter bar */
+  .filter-bar {
+    max-width: 1200px; margin: 1.5rem auto; padding: 0 1.5rem;
+    display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+  }
+  .filter-bar input, .filter-bar select {
+    padding: .6rem 1rem; border: 1px solid var(--gray-400); border-radius: var(--radius);
+    font-size: .95rem; background: #fff;
+  }
+  .filter-bar input { flex: 1; min-width: 200px; }
+  .filter-bar select { min-width: 140px; }
+  .result-count { font-size: .85rem; color: var(--gray-600); margin-left: auto; }
+
+  /* Badges */
+  .badge {
+    display: inline-block; font-size: .7rem; font-weight: 600; padding: .15rem .5rem;
+    border-radius: 4px; text-transform: uppercase; letter-spacing: .03em; margin-left: .5rem;
+    vertical-align: middle;
+  }
+  .badge-open { background: var(--green-100); color: var(--green-700); }
+  .badge-closed { background: var(--red-100); color: var(--red-600); }
+  .badge-unknown { background: var(--gray-100); color: var(--gray-600); }
+  .badge-error { background: var(--red-100); color: var(--red-600); }
+  .badge-none { background: var(--gray-100); color: var(--gray-600); }
+  .badge-review { background: var(--gold-100); color: var(--gold-600); }
+
+  .timestamp { text-align: center; padding: 2rem; color: var(--gray-600); font-size: .85rem; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 1.5rem; }
+    .hero .stats { gap: 1rem; }
+    .page-nav a { padding: .75rem 1rem; font-size: .85rem; }
+    .filter-bar { flex-direction: column; }
+    .filter-bar input { min-width: 100%; }
+  }
+  .section { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+  .table-wrap { overflow-x: auto; }
+  table {
+    width: 100%; border-collapse: collapse; background: #fff;
+    border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
+    font-size: .9rem;
+  }
+  thead { background: var(--green-700); color: #fff; }
+  th { padding: .75rem 1rem; text-align: left; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  th:hover { background: var(--green-600); }
+  td { padding: .65rem 1rem; border-bottom: 1px solid var(--gray-100); vertical-align: top; }
+  td a { color: var(--green-700); text-decoration: none; }
+  td a:hover { text-decoration: underline; }
+  tr:hover td { background: var(--green-50); }
+  .nowrap { white-space: nowrap; }
+  @media (max-width: 768px) {
+    th, td { padding: .5rem .6rem; font-size: .8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero hero-compact">
+  <h1>Federal Grants (Grants.gov)</h1>
+  <p>Agriculture and food-related opportunities from the federal Grants.gov database</p>
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-num">140</span>
+      <span class="stat-label">Total Opportunities</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">140</span>
+      <span class="stat-label">Open / Forecasted</span>
+    </div>
+  </div>
+</div>
+
+
+<div class="page-nav">
+  <a href="index.html" class="">Home</a>
+  <a href="state-grants.html" class="">State Grants</a>
+  <a href="federal-grants.html" class="active">Federal Grants</a>
+</div>
+
+<div class="filter-bar">
+  <input type="text" id="federal-search" placeholder="Search grants, agencies, keywords..." oninput="filterFederal()">
+  <select id="federal-status-filter" onchange="filterFederal()">
+    <option value="all">All statuses</option>
+    <option value="posted">Open (Posted)</option>
+    <option value="forecasted">Forecasted</option>
+    <option value="closed">Closed</option>
+    <option value="archived">Archived</option>
+  </select>
+  <span class="result-count" id="federal-count"></span>
+</div>
+
+<div class="section">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Opportunity</th>
+          <th onclick="sortTable(1)">Agency</th>
+          <th onclick="sortTable(2)">Close Date</th>
+          <th onclick="sortTable(3)">Total Funding</th>
+          <th onclick="sortTable(4)">Award Range</th>
+          <th onclick="sortTable(5)">Contact</th>
+        </tr>
+      </thead>
+      <tbody id="federal-tbody">
+        
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/145d1cb2-34a7-4f79-b927-341045f54938" target="_blank" rel="noopener">FY 2026 SNAP Earnings Verification Support Grant</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Food and Nutrition Service</td>
+      <td class="nowrap">2026-08-19</td>
+      <td class="nowrap">$38,000,000</td>
+      <td class="nowrap">$1 – $4,300,000</td>
+      <td><a href="mailto:dawn.addison@usda.gov">dawn.addison@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/dfd24081-d0e0-4630-8988-bbe1ee8f2689" target="_blank" rel="noopener">Education and Outreach to Tribal Producers through the Tribal Food Safety Alliance</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">2026-08-20</td>
+      <td class="nowrap">$500,000</td>
+      <td class="nowrap">$500,000</td>
+      <td><a href="mailto:patrick.johnson@fda.hhs.gov">patrick.johnson@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/64b21b29-7210-4d55-9630-29a9bbdf9dd8" target="_blank" rel="noopener">Research, Education, and Outreach on Botanical Natural Products</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">2026-08-21</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$5,100,000</td>
+      <td><a href="mailto:patrick.johnson@fda.hhs.gov">patrick.johnson@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/d2e906e4-b4b0-40d3-b20c-12c22bbddfe0" target="_blank" rel="noopener">Cooperative Agreement to Support Shellfish Safety Assistance Project</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">2026-08-21</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$500,000</td>
+      <td><a href="mailto:patrick.johnson@fda.hhs.gov">patrick.johnson@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/10c0d584-b356-49d0-8173-0e94a2eab1f5" target="_blank" rel="noopener">Federal and University Partnership to Improve the Safety of Seafood from the Gulf of America</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">2026-08-21</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$125,000</td>
+      <td><a href="mailto:patrick.johnson@fda.hhs.gov">patrick.johnson@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/09b890ab-146f-4934-9309-ffe72fddd30f" target="_blank" rel="noopener">Regional Conservation Partnership Program (RCPP) Classic for federal fiscal year (FY) 2026</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Natural Resources Conservation Service</td>
+      <td class="nowrap">2026-08-24</td>
+      <td class="nowrap">$310,000,000</td>
+      <td class="nowrap">$250,000 – $10,000,000</td>
+      <td><a href="mailto:rcpp@usda.gov">rcpp@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/e2d850ad-cd5d-4af4-82df-ba31865f7568" target="_blank" rel="noopener">Regional Conservation Partnership Program (RCPP) Alternative Funding Arrangements (AFA) for Federal fiscal year (FY) 2026</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Natural Resources Conservation Service</td>
+      <td class="nowrap">2026-08-24</td>
+      <td class="nowrap">$310,000,000</td>
+      <td class="nowrap">$250,000 – $10,000,000</td>
+      <td><a href="mailto:rcpp@usda.gov">rcpp@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/bb965470-bd8d-4529-b30b-39efe6f81147" target="_blank" rel="noopener">Economic Advancement Grants for Local Empowerment (EAGLE)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Administration for Children and Families - ANA</td>
+      <td class="nowrap">2026-08-27</td>
+      <td class="nowrap">$24,000,000</td>
+      <td class="nowrap">$300,000 – $1,000,000</td>
+      <td><a href="mailto:Carmelia.Strickland@acf.hhs.gov">Carmelia.Strickland@acf.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/56daf3cd-3b5a-4af3-b527-b3bf28f2b087" target="_blank" rel="noopener">Syria Annual Program Statement</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Bureau of Near Eastern Affairs</td>
+      <td class="nowrap">2026-08-31</td>
+      <td class="nowrap">$10,000,000</td>
+      <td class="nowrap">$5,500,000</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/cbd87ef9-d0cc-4bd1-b1e9-b92534082267" target="_blank" rel="noopener">Increasing Market Opportunities in Vietnam for U.S. Innovative Biofertilizer Exporters</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Foreign Agricultural Service</td>
+      <td class="nowrap">2026-09-02</td>
+      <td class="nowrap">$500,000</td>
+      <td class="nowrap">$250,000</td>
+      <td><a href="mailto:clemen.gehlhar@usda.gov">clemen.gehlhar@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/4dc1fa22-a934-49d0-8843-54af5d2829b5" target="_blank" rel="noopener">DRL Ensuring Resilient Seafood Supply Chains: Countering Forced Labor and any associated Illegal, Unreported and Unregulated Fishing</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Bureau of Democracy Human Rights and Labor</td>
+      <td class="nowrap">2026-09-03</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,973,359 – $1,973,359</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/c08f287a-1b49-4751-ac57-87047dc0beb7" target="_blank" rel="noopener">Community Economic Development Projects</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Administration for Children and Families - OCS</td>
+      <td class="nowrap">2026-09-08</td>
+      <td class="nowrap">$17,484,782</td>
+      <td class="nowrap">$100,000 – $800,000</td>
+      <td><a href="mailto:OCSRegistrar@icf.com">OCSRegistrar@icf.com</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/f8cd72d9-492c-4f1d-907b-e370f31ec747" target="_blank" rel="noopener">Rural Housing Preservation Grant</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Rural Housing Service</td>
+      <td class="nowrap">2026-09-08</td>
+      <td class="nowrap">$8,300,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:mandy.couture@usda.gov">mandy.couture@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/676b4ce9-b544-4837-ae0f-75a8fd67512e" target="_blank" rel="noopener">Wetland Mitigation Banking Program Fiscal Year (FY) 2026</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Natural Resources Conservation Service</td>
+      <td class="nowrap">2026-09-08</td>
+      <td class="nowrap">$3,000,000</td>
+      <td class="nowrap">$100,000 – $1,000,000</td>
+      <td><a href="mailto:tessa.garcia@usda.gov">tessa.garcia@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/249a24a4-0bde-436f-bda0-f0bda09f21d0" target="_blank" rel="noopener">Fiscal Year 2027 Expanding Nutrition Services</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Health Resources and Services Administration</td>
+      <td class="nowrap">2026-09-09</td>
+      <td class="nowrap">$125,000,000</td>
+      <td class="nowrap">$350,000 – $350,000</td>
+      <td><a href="mailto:bphcfunding@hrsa.gov">bphcfunding@hrsa.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/88644881-ce90-4751-a460-47afc1d541fd" target="_blank" rel="noopener">Scholarships for Students at 1890 Institutions (1890 Scholarships)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institute of Food and Agriculture</td>
+      <td class="nowrap">2026-09-10</td>
+      <td class="nowrap">$67,200,000</td>
+      <td class="nowrap">$1,111,578 – $5,557,890</td>
+      <td><a href="mailto:grantapplicationquestions@usda.gov">grantapplicationquestions@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/570e5811-5ca9-485b-834e-38490cf967c5" target="_blank" rel="noopener">Forest Legacy Program - FY2028 Funding</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Forest Service</td>
+      <td class="nowrap">2026-09-11</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$5,000 – $20,000,000</td>
+      <td><a href="mailto:sm.fs.flp@usda.gov">sm.fs.flp@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/a2d0b5b3-96c0-4365-8aed-fbd68269f072" target="_blank" rel="noopener">Cooperative Agreement for Affiliated Partner with the Gulf Coast Cooperative Ecosystem Studies Unit (CESU)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Geological Survey</td>
+      <td class="nowrap">2026-09-11</td>
+      <td class="nowrap">$350,000</td>
+      <td class="nowrap">$1 – $350,000</td>
+      <td><a href="mailto:katherine_calder@ios.doi.gov">katherine_calder@ios.doi.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/42f8957c-cc13-412c-b627-7f679556115b" target="_blank" rel="noopener">Plant Protection Act Section 7721 Plant Pest and Disease Management and Disaster Prevention Program (PPDMDPP)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Animal and Plant Health Inspection Service</td>
+      <td class="nowrap">2026-09-21</td>
+      <td class="nowrap">$73,000,000</td>
+      <td class="nowrap">$1 – $400,000</td>
+      <td><a href="mailto:ppa-projects@usda.gov">ppa-projects@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/199de229-1f8e-4dad-a155-2b078027bb29" target="_blank" rel="noopener">Food and Agriculture Defense Initiative Extension Disaster Education Network</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institute of Food and Agriculture</td>
+      <td class="nowrap">2026-09-21</td>
+      <td class="nowrap">$382,400</td>
+      <td class="nowrap">$382,400 – $382,400</td>
+      <td><a href="mailto:grantapplicationquestions@usda.gov">grantapplicationquestions@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/32617965-5981-4f6d-904a-6856ed48769a" target="_blank" rel="noopener">NRCS' Feral Swine Eradication and Control Pilot Program Fiscal Year (FY) 2026</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Natural Resources Conservation Service</td>
+      <td class="nowrap">2026-09-21</td>
+      <td class="nowrap">$35,000,000</td>
+      <td class="nowrap">$75,000 – $3,000,000</td>
+      <td><a href="mailto:sarah.trumbull@usda.gov">sarah.trumbull@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/b76d7c93-581c-4978-85a2-d9677684537e" target="_blank" rel="noopener">FY26 Bureau of Land Management Invasive and Noxious Plant Management - Bureau wide</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Bureau of Land Management</td>
+      <td class="nowrap">2026-09-25</td>
+      <td class="nowrap">$2,000,000</td>
+      <td class="nowrap">$20,000 – $400,000</td>
+      <td><a href="mailto:melissa_gribble@ios.doi.gov">melissa_gribble@ios.doi.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/8608180b-b65c-45e6-844c-c420e4c78c2d" target="_blank" rel="noopener">FY26 Bureau of Land Management Plant Conservation and Restoration Management - Bureau wide</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Bureau of Land Management</td>
+      <td class="nowrap">2026-09-28</td>
+      <td class="nowrap">$2,500,000</td>
+      <td class="nowrap">$10,000 – $500,000</td>
+      <td><a href="mailto:laura_pettit@ios.doi.gov">laura_pettit@ios.doi.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/f2b1a5af-5d12-408b-a368-4b89f9de1ae3" target="_blank" rel="noopener">Coordinating Agricultural Development &amp; Innovation (CADI) to enable America First Trade Wins in Europe, the South Caucasus and Central Asia</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Foreign Agricultural Service</td>
+      <td class="nowrap">2026-09-28</td>
+      <td class="nowrap">$997,500</td>
+      <td class="nowrap">$332,500</td>
+      <td><a href="mailto:Benjamin.kairn@usda.gov">Benjamin.kairn@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/365a89b2-7d48-48b2-9929-87b7e747d6ab" target="_blank" rel="noopener">ECosystem for Leading Innovation in Plasma Science and Engineering (ECLIPSE)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>U.S. National Science Foundation</td>
+      <td class="nowrap">2026-09-29</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsgovsupport@nsf.gov">grantsgovsupport@nsf.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/369deb5e-871b-449b-b7bf-f9fb8440c325" target="_blank" rel="noopener">Rural Decentralized Water System Grant Program</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Rural Utilities Service</td>
+      <td class="nowrap">2026-09-30</td>
+      <td class="nowrap">$11,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:Water-RD@usda.gov">Water-RD@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/d3fa5bee-6713-46d4-9f6f-24e839301546" target="_blank" rel="noopener">International Programs &amp; Trade, Invasive Species Program Funding Opportunity</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Forest Service</td>
+      <td class="nowrap">2026-09-30</td>
+      <td class="nowrap">$500,000</td>
+      <td class="nowrap">$250,000</td>
+      <td><a href="mailto:elizabeth.lebow@usda.gov">elizabeth.lebow@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/01106fd9-4d85-4669-ae46-0b48b0c9e5f4" target="_blank" rel="noopener">Cold Chain Grants for Emergency Food Assistance</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Agricultural Marketing Service</td>
+      <td class="nowrap">2026-10-01</td>
+      <td class="nowrap">$7,500,000</td>
+      <td class="nowrap">$2,000,000 – $7,500,000</td>
+      <td><a href="mailto:AMS.CCG@usda.gov">AMS.CCG@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/ca9db99d-1e3c-4ff9-be27-39c4e81f9122" target="_blank" rel="noopener">Sheep Production and Marketing Grant Program FY 2026</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Agricultural Marketing Service</td>
+      <td class="nowrap">2026-10-02</td>
+      <td class="nowrap">$2,400,000</td>
+      <td class="nowrap">$1,000,000 – $2,400,000</td>
+      <td><a href="mailto:IPPGrants@usda.gov">IPPGrants@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/ad915364-00bf-4782-8a03-4852d074f6e8" target="_blank" rel="noopener">Advancing Research on the Application of Digital Health Technology to the Management of Type 2 Diabetes (R01- Clinical Trail Required)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2026-10-06</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/588a169a-478d-4554-bbd6-d8e3416000d2" target="_blank" rel="noopener">Optimal Treatment Strategies for use of Anti-Obesity Medications (AOMs) in Children and Adolescents Clinical Centers (U01 Clinical Trial Required)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2026-10-09</td>
+      <td class="nowrap">$3,000,000</td>
+      <td class="nowrap">$1,000,000</td>
+      <td><a href="mailto:voula.osganian@nih.gov">voula.osganian@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/86e848c2-6ff6-4b35-a18b-bc2d031f81c1" target="_blank" rel="noopener">Optimal Treatment Strategies for use of Anti-Obesity Medications (AOMs) in Children and Adolescents Research Coordinating Center (U24 Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2026-10-09</td>
+      <td class="nowrap">$1,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:NIDDK_Obesity@nih.gov">NIDDK_Obesity@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/a9a8b77d-de7b-4cfe-aac2-7b217f908ed8" target="_blank" rel="noopener">2026 National Urban and Community Forestry Challenge Cost Share Grant Program</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Forest Service</td>
+      <td class="nowrap">2026-10-12</td>
+      <td class="nowrap">$1,000,000</td>
+      <td class="nowrap">$200,000 – $750,000</td>
+      <td><a href="mailto:nancy.stremple@usda.gov">nancy.stremple@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/dcf3dae2-56a4-4107-8c0e-582a82132dbc" target="_blank" rel="noopener">Community Forest and Open Space Conservation Program</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Forest Service</td>
+      <td class="nowrap">2026-10-13</td>
+      <td class="nowrap">$4,950,000</td>
+      <td class="nowrap">$1 – $600,000</td>
+      <td><a href="mailto:SM.FS.CFP@usda.gov">SM.FS.CFP@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/75f811fc-1478-42ec-b72a-06c96c4ede29" target="_blank" rel="noopener">Food and Agricultural Sciences National Needs Graduate and Postgraduate Fellowships</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institute of Food and Agriculture</td>
+      <td class="nowrap">2026-10-15</td>
+      <td class="nowrap">$14,000,000</td>
+      <td class="nowrap">$78,000 – $705,000</td>
+      <td><a href="mailto:grantapplicationquestions@usda.gov">grantapplicationquestions@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/c1eed04a-ba67-4522-8093-b8ed07d3148a" target="_blank" rel="noopener">ROSES25: A.13 Accelerating Earth Solutions</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>NASA Headquarters</td>
+      <td class="nowrap">2026-10-15</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:erin.urquhart@nasa.gov">erin.urquhart@nasa.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/e80ae5c6-0eed-451c-ba5e-4c848c622791" target="_blank" rel="noopener">Higher Education Challenge   Grants Program</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institute of Food and Agriculture</td>
+      <td class="nowrap">2026-10-15</td>
+      <td class="nowrap">$5,700,000</td>
+      <td class="nowrap">$150,000 – $750,000</td>
+      <td><a href="mailto:grantapplicationquestions@usda.gov">grantapplicationquestions@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/881ebc06-b741-480f-a9fb-688cb1407352" target="_blank" rel="noopener">Plant Protection Act Section 7721 Fiscal Year 2027 National Clean Plant Network (NCPN)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Animal and Plant Health Inspection Service</td>
+      <td class="nowrap">2026-10-19</td>
+      <td class="nowrap">$10,000,000</td>
+      <td class="nowrap">$1 – $3,500,000</td>
+      <td><a href="mailto:ncpn@usda.gov">ncpn@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/cb36f642-f92b-4b27-9bc8-47440c03eb09" target="_blank" rel="noopener">Nutrition Obesity Research Centers (NORCs) (P30 Clinical Trial Optional)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2026-10-20</td>
+      <td class="nowrap">$3,600,000</td>
+      <td class="nowrap">$750,000</td>
+      <td><a href="mailto:NIDDK_DDN@nih.gov">NIDDK_DDN@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/89a07b27-f689-431c-87e4-85a217971976" target="_blank" rel="noopener">NCCIH Natural Product Early Phase Clinical Trial Award (R33 Clinical Trial Required)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2026-11-13</td>
+      <td class="nowrap">$1,050,000</td>
+      <td class="nowrap">$1,050,000</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/99cd70d1-05f4-49dc-b577-eaba13ac8b18" target="_blank" rel="noopener">NCCIH Natural Product Mid Phase Clinical Trial (R01 Clinical Trial Required)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2026-11-13</td>
+      <td class="nowrap">$350,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/a84630f2-9d3d-4a26-a95f-e716b804bf89" target="_blank" rel="noopener">NCCIH Natural Product Early Phase Clinical Trial Phased Innovation Award (R61/R33 Clinical Trial Required)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2026-11-13</td>
+      <td class="nowrap">$350,000</td>
+      <td class="nowrap">$350,000</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/01db6b26-98f3-43cc-ba54-f38ee97aefdb" target="_blank" rel="noopener">National Science Foundation Translation to Practice</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>U.S. National Science Foundation</td>
+      <td class="nowrap">2026-11-17</td>
+      <td class="nowrap">$30,000,000</td>
+      <td class="nowrap">$600,000 – $2,000,000</td>
+      <td><a href="mailto:grantsgovsupport@nsf.gov">grantsgovsupport@nsf.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/002d36ed-9901-45b6-a1c4-2642dbf64146" target="_blank" rel="noopener">NIH Research Software Engineer (RSE) Award (R50 Clinical Trials Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2026-12-04</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/01f10b3d-0bc4-4e12-98af-f05c66e6537f" target="_blank" rel="noopener">Specialty Crop Multi-State Grant Program 2026</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Agricultural Marketing Service</td>
+      <td class="nowrap">2026-12-04</td>
+      <td class="nowrap">$14,300,000</td>
+      <td class="nowrap">$250,000 – $1,000,000</td>
+      <td><a href="mailto:sagpgrants@usda.gov">sagpgrants@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/009984f3-5d56-4626-919f-fa5687db7d5b" target="_blank" rel="noopener">Great Lakes Restoration Initiative: Community Forest and Open Space Conservation Program</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Forest Service</td>
+      <td class="nowrap">2026-12-08</td>
+      <td class="nowrap">$3,500,000</td>
+      <td class="nowrap">$1,000,000</td>
+      <td><a href="mailto:liam.krause@usda.gov">liam.krause@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/5bf434f3-5a29-4c07-a179-1ba41c662fd3" target="_blank" rel="noopener">Agriculture and Food Research Initiative Competitive Grants Program Education and Workforce Development</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institute of Food and Agriculture</td>
+      <td class="nowrap">2026-12-31</td>
+      <td class="nowrap">$39,700,000</td>
+      <td class="nowrap">$10,000 – $650,000</td>
+      <td><a href="mailto:grantapplicationquestions@usda.gov">grantapplicationquestions@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/10a7404c-3e2f-4355-9044-78c8bafc35cd" target="_blank" rel="noopener">Agriculture and Food Research Initiative Competitive Grants Program Foundational and Applied Science Program</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institute of Food and Agriculture</td>
+      <td class="nowrap">2026-12-31</td>
+      <td class="nowrap">$300,000,000</td>
+      <td class="nowrap">$10,000 – $10,000,000</td>
+      <td><a href="mailto:grantapplicationquestions@usda.gov">grantapplicationquestions@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/093302d1-5ade-4c5b-a90a-ab6e43bcc72b" target="_blank" rel="noopener">Tribal Colleges Research Grants Program</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institute of Food and Agriculture</td>
+      <td class="nowrap">2026-12-31</td>
+      <td class="nowrap">$11,574,000</td>
+      <td class="nowrap">$150,000 – $2,500,000</td>
+      <td><a href="mailto:grantapplicationquestions@usda.gov">grantapplicationquestions@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/818e5c60-39e1-4009-9d8e-698d365b5ad1" target="_blank" rel="noopener">Intervention Research to Improve Native American Health (R01 Clinical Trial Optional)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-01-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/14a56590-38c0-4e5e-8202-117a9297aa35" target="_blank" rel="noopener">HEAL Initiative: Studies to Enable Analgesic Discovery (R61/R33 - Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-01-15</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$350,000</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/0b08c799-a202-45f2-92ad-318044afbc2d" target="_blank" rel="noopener">NARMS Cooperative Agreement Program to Strengthen Antibiotic Resistance Surveillance in Retail Food Specimens</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">2027-04-01</td>
+      <td class="nowrap">$5,000,000</td>
+      <td class="nowrap">$200,000</td>
+      <td><a href="mailto:jenise.mcnair@fda.hhs.gov">jenise.mcnair@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/73f39ef2-101c-4f6a-bf77-30ebea1d8474" target="_blank" rel="noopener">Short Courses on Innovative Methodologies and Approaches in the Behavioral and Social Sciences (R25 Clinical Trials Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-04-09</td>
+      <td class="nowrap">$200,000</td>
+      <td class="nowrap">$200,000</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/71f5944d-49d5-42ec-b3fb-d35a9af3e7f6" target="_blank" rel="noopener">NIH Pathway to Independence Award (Parent K99/R00  Independent Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-05-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/8e89d84a-1f55-4cb8-b969-5a94c782ea79" target="_blank" rel="noopener">Mentored Patient-Oriented Research Career Development Award (Parent K23  Independent Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-05-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/c212a6ad-22b6-4397-a3fc-3c465f85a4f0" target="_blank" rel="noopener">Mentored Quantitative Research Development Award (Parent K25 Independent Clinical Trial Required)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-05-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/bfff80db-fe94-4069-b095-ea79fe5fe2c8" target="_blank" rel="noopener">Mentored Quantitative Research Development Award (Parent K25 Independent Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-05-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/28685145-3771-46d6-9c2c-94db340ee74f" target="_blank" rel="noopener">Mentored Research Scientist Development Award (Parent K01 - Independent Clinical Trial Required)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-05-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/cb91feb1-23b4-49b7-b8d3-9a8fe626a5b5" target="_blank" rel="noopener">Mentored Research Scientist Development Award (Parent K01 - Independent Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-05-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/de903ee7-38f9-47e4-8a95-301edcf7fe46" target="_blank" rel="noopener">NIH Pathway to Independence Award (Parent K99/R00  Independent Clinical Trial Required)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-05-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/7cf4ba90-dba8-4cfd-bc31-5baeb10bea5f" target="_blank" rel="noopener">Mentored Clinical Scientist Research Career Development Award (Parent K08  Independent Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-05-08</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/b9304bd3-c0a4-4512-b3cb-869117adacbe" target="_blank" rel="noopener">Mentored Patient-Oriented Research Career Development Award (Parent K23  Independent Clinical Trial Required)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-05-08</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/e58d2812-d00d-46de-b4eb-97d3f215113f" target="_blank" rel="noopener">Change of Recipient Organization (Type 7 Parent Clinical Trial Optional)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-07-12</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/a940c518-8df8-4df8-ad9b-e1a5c84d48eb" target="_blank" rel="noopener">WaterSMART Enhancing Water Resources Projects</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Bureau of Reclamation</td>
+      <td class="nowrap">2027-09-08</td>
+      <td class="nowrap">$60,000,000</td>
+      <td class="nowrap">$50,000 – $3,000,000</td>
+      <td><a href="mailto:bor-sha-fafoa@usbr.gov">bor-sha-fafoa@usbr.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/f86a4e9d-1aad-4331-9d27-cfd38649bc82" target="_blank" rel="noopener">Priority HIV/AIDS Research within the Mission of NIDDK (R01 Clinical Trial Optional)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-11-05</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/da7539a2-83d7-43b5-a2c6-c75c241c83db" target="_blank" rel="noopener">Pilot Studies of Biological, Behavioral and Social Mechanisms Contributing to HIV Pathogenesis Within the Mission of NIDDK (R21 Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2027-11-16</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/492cacb7-4928-4c3e-a5de-f9fe1b2f1e15" target="_blank" rel="noopener">Stimulating Hematology Investigation: New Endeavors (SHINE) (R01 Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-01-06</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/1fd3d671-8469-40ac-bbd6-adac625cf082" target="_blank" rel="noopener">Dissemination and Implementation Research in Health (R01 Clinical Trial Optional)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-01-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/17223aaa-4ddf-44ef-a26e-d995578c2cb9" target="_blank" rel="noopener">NIH Research Project Grant (Parent R01 Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-01-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/d91c6831-95b8-4598-90e1-255b03260d44" target="_blank" rel="noopener">Limited Competition: Small Grant Program for NIDDK K01/K08/K23/K25 Recipients (R03 Clinical Trial Optional)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-01-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$75,000</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/322e2417-4b14-4e57-a487-142850f52e2f" target="_blank" rel="noopener">Academic Research Enhancement Award (AREA) for Undergraduate-Focused Institutions (R15 Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-01-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$375,000</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/84afc4e4-f232-4366-a6ee-50205610a432" target="_blank" rel="noopener">NIH Research Project Grant (Parent R01 Clinical Trial Required)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-01-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/eba5be60-4531-4ddf-aa56-6b1d419155ce" target="_blank" rel="noopener">Laboratory Flexible Funding Model (LFFM)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">2028-01-11</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,500,000</td>
+      <td><a href="mailto:lisa.pendleton@fda.hhs.gov">lisa.pendleton@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/bd451531-c875-4143-978d-9984b76eba0b" target="_blank" rel="noopener">2026 Alaska Marine Education and Training Mini-Grant Program</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>DOC NOAA - ERA Production</td>
+      <td class="nowrap">2028-05-01</td>
+      <td class="nowrap">$600,000</td>
+      <td class="nowrap">$15,000 – $75,000</td>
+      <td><a href="mailto:akr.grants@noaa.gov">akr.grants@noaa.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/d1bbe8bf-fd2c-4bdc-8c7d-ebc5e095b3b4" target="_blank" rel="noopener">Ruth L. Kirschstein National Research Service Award (NRSA) Individual Fellowship for Students at Institutions with NIH-Funded Institutional Predoctoral Dual-Degree Training Programs (Parent F30)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-05-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/f7dde5e3-95ff-464f-88ba-8d303197a36c" target="_blank" rel="noopener">Ruth L. Kirschstein National Research Service Award (NRSA) Individual Predoctoral Fellowship (Parent F31)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-05-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/62cbc866-169b-474c-9dc9-cae3aa77fb4b" target="_blank" rel="noopener">Ruth L. Kirschstein National Research Service Award (NRSA) Individual Fellowship for Students at Institutions Without NIH-Funded Institutional Predoctoral Dual-Degree Training Programs (Parent F30)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-05-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/540f0a51-dda9-4ec3-889b-85b8c24f2787" target="_blank" rel="noopener">Ruth L. Kirschstein National Research Service Award (NRSA) Short-Term Institutional Research Training Grant (Parent T35)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-05-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/0c33aa4f-7dd8-4887-a43e-25eab341ae98" target="_blank" rel="noopener">Ruth L. Kirschstein National Research Service Award (NRSA) Individual Postdoctoral Fellowship (Parent F32)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-05-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/bd1b6f4b-400a-451b-9af9-14b572457e6f" target="_blank" rel="noopener">Animal and Veterinary Innovation Centers (U18)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">2028-05-12</td>
+      <td class="nowrap">$3,000,000</td>
+      <td class="nowrap">$1,250,000</td>
+      <td><a href="mailto:jenise.mcnair@fda.hhs.gov">jenise.mcnair@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/4f761ca6-4ece-4326-91ff-c2c32204bb3b" target="_blank" rel="noopener">Stephen I. Katz Early Stage Investigator Research Project Grant (R01 Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-08-25</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/8e4a156c-436f-47fe-9f8b-b82ca0ca901e" target="_blank" rel="noopener">Vet-LIRN Capacity-Building Project and Equipment Grants (U18)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">2028-09-04</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$225,000 – $2,500,000</td>
+      <td><a href="mailto:kimberly.pendleton@fda.hhs.gov">kimberly.pendleton@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/43b3833e-1f05-41d1-86d3-55fedc41ceb8" target="_blank" rel="noopener">Support for Research Excellence (SuRE) Award (R16 Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-09-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$100,000</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/7dc976b1-c6ab-4669-b482-5ff5173e4a4e" target="_blank" rel="noopener">Support for Research Excellence  First Independent Research (SuRE-First) Award (R16 - Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-09-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$125,000</td>
+      <td><a href="mailto:grantsinfo@nih.gov">grantsinfo@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/97a58662-f148-46c2-bacd-1d2147666063" target="_blank" rel="noopener">Animal and Biological Material Resource Centers (P40 Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">2028-09-26</td>
+      <td class="nowrap">$1,300,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:ORIPDCM@mail.nih.gov">ORIPDCM@mail.nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/ff15cb33-0303-4a33-8579-082db181f538" target="_blank" rel="noopener">F24AS00298 Cooperative Agriculture</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Fish and Wildlife Service</td>
+      <td class="nowrap">2029-03-07</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:christian_myers@fws.gov">christian_myers@fws.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/401d247c-a24c-4161-82b1-b9348f732bb8" target="_blank" rel="noopener">Rapid Response Team (RRT) Cooperative Agreement</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$8,250,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:janelle.fundersburg@fda.hhs.gov">janelle.fundersburg@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/22227ca0-7530-42d3-858a-473b82a81d80" target="_blank" rel="noopener">Retail Food Safety Regulatory Association Collaboration</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$4,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:danielle.head@fda.hhs.gov">danielle.head@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/32b762a5-5284-4cd0-bb03-decc1b76a485" target="_blank" rel="noopener">2023 Emerging Voices Small Grants Program</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>U.S. Mission to the Philippines</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$40,000</td>
+      <td class="nowrap">$5,000 – $20,000</td>
+      <td><a href="mailto:GrantsManila@state.gov">GrantsManila@state.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/342ab033-520e-4cf7-9f23-f823535044de" target="_blank" rel="noopener">Forecast to Publish a Notice of Funding Opportunity Announcement for Addressing Determinants of Health Disparities Among Rural Populations (R01 - Clinical Trial Optional)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$5,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:priscah.mujuru@nih.gov">priscah.mujuru@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/3c36bc50-73ae-42ad-a727-fae640dad5c9" target="_blank" rel="noopener">Comprehensive Suicide Prevention Program for States</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Centers for Disease Control - NCIPC</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$117,500,000</td>
+      <td class="nowrap">$650,000 – $1,200,000</td>
+      <td><a href="mailto:CSP@cdc.gov">CSP@cdc.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/354883d0-cdf7-4353-90d4-59d5b8f7c331" target="_blank" rel="noopener">Powering Affordable Reliable Technology (PART) Energy Program</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Rural Utilities Service</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$410,000,000</td>
+      <td class="nowrap">$1,000,000 – $100,000,000</td>
+      <td><a href="mailto:SM.RD.RUS.PART-Questions@usda.gov">SM.RD.RUS.PART-Questions@usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/5a0b4ac7-5736-4698-ae7a-a12fca515956" target="_blank" rel="noopener">Limited Competition: Chronic Kidney Diseases of UnceRtain Etiology (CKDu) in Agricultural Communities (CURE) Research Consortium- Field Epidemiology Sites</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$6,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:susan.mendley@nih.gov">susan.mendley@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/1068d706-36d8-4f1d-ac25-c3233f27669a" target="_blank" rel="noopener">Selective Precision Targeting (SPoT)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,500,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:passley.hargrove@nih.gov">passley.hargrove@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/112a0e4f-edb3-44dd-9443-892840371b24" target="_blank" rel="noopener">The NIDDK Disorders of Gastrointestinal Interoception Consortium Clinical Centers (DGIC)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$3,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:terez.shea-donohue@nih.gov">terez.shea-donohue@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/16dd4363-d3e1-44e7-81b8-eaf8f573d0d1" target="_blank" rel="noopener">Maternal and Child Health (MCH) Nutrition Training Program</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Health Resources and Services Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$10,350,000</td>
+      <td class="nowrap">$550,000 – $735,000</td>
+      <td><a href="mailto:MCHNutritionTraining@hrsa.gov">MCHNutritionTraining@hrsa.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/1750ece3-d50d-4613-a971-2965051fb638" target="_blank" rel="noopener">FDA's Integrated Food Safety System Training Delivery and Development</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:patrick.johnson@fda.hhs.gov">patrick.johnson@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/6e5dffa5-a76e-4b59-8677-6a4eee44c827" target="_blank" rel="noopener">Behavioral Health Integration Initiative</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Indian Health Service</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$5,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:dgm@ihs.gov">dgm@ihs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/806174a5-61cf-4bcb-946b-e6cd65b52726" target="_blank" rel="noopener">Renewable Energy Systems and Energy Efficiency Improvements Program</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Rural Business-Cooperative Service </td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$35,400,000</td>
+      <td class="nowrap">$1,500 – $500,000</td>
+      <td><a href="mailto:Refer to energy coordinator list via link posted above.">Refer to energy coordinator list via link posted above.</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/aec299fc-ac56-43f0-b947-521bb8699893" target="_blank" rel="noopener">Embassy Belgrade PAS - University Partnership</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>U.S. Mission to Serbia</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$240,000</td>
+      <td class="nowrap">$40,000 – $240,000</td>
+      <td><a href="mailto:bakraclict@state.gov">bakraclict@state.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/a7d90b10-6b93-44b3-b848-78bede8db2f0" target="_blank" rel="noopener">NIOSH National Center of Excellence for the Prevention of Childhood Agricultural Injury (U54)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Centers for Disease Control and Prevention - ERA</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$8,000,000</td>
+      <td class="nowrap">$1,600,000</td>
+      <td><a href="mailto:jstreit@cdc.gov">jstreit@cdc.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/91454c48-930c-4d95-a0dd-8d71233d502b" target="_blank" rel="noopener">Annual Program Statement (APS) For Fiscal Year 2026</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>U.S. Mission to Tunisia</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$10,000 – $200,000</td>
+      <td><a href="mailto:benmohamedk@state.gov">benmohamedk@state.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/b8b51aae-68fc-448a-bbca-5fbfd229a841" target="_blank" rel="noopener">Manufactured Foods Flexible Funding Model (MF-FFM)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:gordana.zuber@fda.hhs.gov">gordana.zuber@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/f2d50b34-2ffa-41ec-a913-4a9f417097a1" target="_blank" rel="noopener">Microplastics Research and Resource Coordination Center (U24 - Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$2,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:NOFO.Information@niehs.nih.gov">NOFO.Information@niehs.nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/f32a5872-0333-4d72-bb53-3a5fa18e8548" target="_blank" rel="noopener">Animal Food Regulatory Program Alliance</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$600,000 – $600,000</td>
+      <td><a href="mailto:terrin.brown@fda.hhs.gov">terrin.brown@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/7055450d-1520-47c9-a1a4-0c654b4eadff" target="_blank" rel="noopener">Translational Centers Using Microphysiologic Systems for Infectious Diseases</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$7,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:DMIDMPSTranslational@mail.nih.gov">DMIDMPSTranslational@mail.nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/4d8391bf-3396-44ae-9ed0-11c9e6d9cac8" target="_blank" rel="noopener">Protecting the American Seafood Supply Chain by Countering Unfair Labor Practices and Illegal, Unreported, and Unregulated (IUU) Fishing  </a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Bureau of International Labor Affairs</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$11,000,000</td>
+      <td class="nowrap">$11,000,000 – $11,000,000</td>
+      <td><a href="mailto:OGM_ILAB@dol.gov">OGM_ILAB@dol.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/57075261-4a9d-4834-b547-db4bc3befb71" target="_blank" rel="noopener">Controlled Clinical Trials on Long-Term Effects of Nutritional Interventions on the Progression of Risk Factors for Age-Related Chronic Conditions Over the Life Span and Their Age of Onset</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:NIA-NOFO-Scientific@nih.gov">NIA-NOFO-Scientific@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/0bbeec01-73e3-4391-997b-1dc30c7e8e82" target="_blank" rel="noopener">Animal Food Regulatory Program Standards Implementation Development and Maintenance, with Mutual Reliance Initiatives</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$10,600,000 – $10,600,000</td>
+      <td><a href="mailto:terrin.brown@fda.hhs.gov">terrin.brown@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/18c0a9f1-fe39-4c7a-8ffd-1d8c656d666f" target="_blank" rel="noopener">Telehealth Nutrition Services Network Grant Program</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Health Resources and Services Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$4,500,000</td>
+      <td class="nowrap">$300,000</td>
+      <td><a href="mailto:cmena@hrsa.gov">cmena@hrsa.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/14c2b96f-e210-4856-8901-f8278996198a" target="_blank" rel="noopener">NARMS Cooperative Agreement Program to Strengthen Antibiotic Resistance Surveillance in Retail Food Specimens</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$4,500,000</td>
+      <td><a href="mailto:terrin.brown@fda.hhs.gov">terrin.brown@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/0daff0f7-3225-41a4-b27e-a264bb3bf189" target="_blank" rel="noopener">NIDDK Multi-Purpose Resource-Related, Multi-Component Research Services Centers Cooperative Agreement (U2C - Clinical Trial Optional)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$9,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:NIDDK_DEM@nih.gov">NIDDK_DEM@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/9f506d94-0ad4-4b56-998d-4ddb82ce92b9" target="_blank" rel="noopener">Cooperative Agreement to Support Effective Dissemination of Clinical Practice Guidelines</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,000,000 – $1,000,000</td>
+      <td><a href="mailto:terrin.brown@fda.hhs.gov">terrin.brown@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/8b2aa3e2-733a-44d8-876e-56df42678c9a" target="_blank" rel="noopener">Fiscal Year 2027 Regional Nutrition Hubs</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Health Resources and Services Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$5,000,000</td>
+      <td class="nowrap">$1,000,000 – $1,000,000</td>
+      <td><a href="mailto:bphcfunding@hrsa.gov">bphcfunding@hrsa.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/cb00c4af-063a-49b3-82fe-1c6d5b5e47e0" target="_blank" rel="noopener">Single Source: Chronic Kidney Diseases of UnceRtain Etiology (CKDu) in Agricultural Communities (CURE) Research Consortium- Renal and Environmental Science Core (U01-Clinical Trial Not Allowed)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,750,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:NIDDK_KUH@nih.gov">NIDDK_KUH@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/ea6d9f3d-6f68-4eb7-9afd-5000d2e3a3c8" target="_blank" rel="noopener">NIOSH Centers for Agriculture, Forestry, and Fishing Safety and Health (U54)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Centers for Disease Control and Prevention - ERA</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$110,000,000</td>
+      <td class="nowrap">$2,200,000</td>
+      <td><a href="mailto:jstreit@cdc.gov">jstreit@cdc.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/e8270680-ae40-4ab8-88b2-67a574a2638b" target="_blank" rel="noopener">Plant Biotic Interactions</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>U.S. National Science Foundation</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$18,500,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:grantsgovsupport@nsf.gov">grantsgovsupport@nsf.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/fcc5b681-2c2f-42d8-816d-430875a86bc3" target="_blank" rel="noopener">Elucidation and Validation of the role of Transporters in the Placenta, Lactating Mammary Gland, Developing Gut, and Blood Brain Barrier</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$3,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:nichd_opptb_nofos@mail.nih.gov">nichd_opptb_nofos@mail.nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/5edf6eec-e8eb-4a55-a914-5c6077ef8e64" target="_blank" rel="noopener">The NIDDK Inflammatory Bowel Disease Genetics Consortium (IBDGC) Genomic Research Centers</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$6,400,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:Ludmila.pawlikowska@nih.gov">Ludmila.pawlikowska@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/6899b4bb-0139-4408-9a57-42898c940ebd" target="_blank" rel="noopener">Retail Food Safety Regulatory Association Collaboration CAP</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$4,000,000 – $4,000,000</td>
+      <td><a href="mailto:terrin.brown@fda.hhs.gov">terrin.brown@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/58c36d1c-2ed3-40b5-adcd-fa09e2377565" target="_blank" rel="noopener">National Defense Education Program (NDEP) Science, Technology, Engineering, and Mathematics (STEM) Consortia Request for Information (RFI) for the Office of the Under Secretary of Defense (Research &amp; Engineering)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Department of Defense</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:osd.dodstem@mail.mil">osd.dodstem@mail.mil</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/208b9a8e-5bff-4b80-b713-4e597a525d5a" target="_blank" rel="noopener">USDA/USDOI Joint Fire Science Program (JFSP)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Bureau of Land Management</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:kdeltoro@blm.gov">kdeltoro@blm.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/100629a0-aec1-49d6-bbf1-554ae80baad1" target="_blank" rel="noopener">Funding Opportunity Announcement for Impact of Environmental Exposures on Gut-Brain Signaling in Neurological Conditions (R01)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$4,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:anika.dzierlenga@nih.gov">anika.dzierlenga@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/1c7b3701-9028-4d4f-8c74-e9f1aa1b2194" target="_blank" rel="noopener">Food Safety Capacity and Infrastructure Building (U2F)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,000,000</td>
+      <td class="nowrap">$1,000,000</td>
+      <td><a href="mailto:danielle.head@fda.hhs.gov">danielle.head@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/311ba9a8-7926-4a39-bcf6-25916c609323" target="_blank" rel="noopener">Renewable Energy Systems and Energy Efficiency Improvements Program</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>Rural Business-Cooperative Service </td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$35,400,000</td>
+      <td class="nowrap">$1,500 – $500,000</td>
+      <td><a href="mailto:maureen.hessel@wdc.usda.gov">maureen.hessel@wdc.usda.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/3b811770-3f95-4ee9-ac57-6fe99d2e8e01" target="_blank" rel="noopener">Integrated Food Safety System Regulatory and Laboratory Training System National Coordination Center</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,500,000 – $1,500,000</td>
+      <td><a href="mailto:terrin.brown@fda.hhs.gov">terrin.brown@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/3a1c4127-9699-412d-8904-742bbf20a33a" target="_blank" rel="noopener">Maternal and Child Health Encounters Networks (MCHEK)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Health Resources and Services Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,000,000</td>
+      <td class="nowrap">$1,000,000 – $1,000,000</td>
+      <td><a href="mailto:CYSHCN@hrsa.gov">CYSHCN@hrsa.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/289adf14-3b51-4ede-ae50-4ed7d0527c17" target="_blank" rel="noopener">Culture of Research and University Exchanges Prep program (CRUX) in One Health and Agricultural STEM</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>U.S. Mission to Zimbabwe</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$150,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:hishmehjo@state.gov">hishmehjo@state.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/2ce534e7-06fb-4e43-ad6b-e5646beae1b2" target="_blank" rel="noopener">U.S. Embassy Phnom Penh – PAS Annual Program Statement</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>U.S. Mission to Cambodia</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$20,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:PASPhnomPenh@state.gov">PASPhnomPenh@state.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/24972c0e-9015-40ed-b637-12ebde1e5066" target="_blank" rel="noopener">Single Source for Chronic Kidney Diseases of UnceRtain Etiology (CKDu) in Agricultural Communities (CURE) Research Consortium - Data Coordinating Center (DCC)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,750,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:NIDDK_KUH@nih.gov">NIDDK_KUH@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/8212b1d6-5192-4926-8bbb-ee8522f33a10" target="_blank" rel="noopener">Collaborative Awards to Support Microphysiological System Pilot Studies in Type 2 Diabetes Research</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:albert.hwa@nih.gov">albert.hwa@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/8d79c6d1-86ef-4cb3-b467-b00baccfeea0" target="_blank" rel="noopener">Federal and State Integration Activities to Advance Cooperation and Regulatory Standards Among Animal Food Safety Regulatory Programs</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:danielle.head@fda.hhs.gov">danielle.head@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/a2ea641e-ccb6-46e8-922d-c2d3d0c5ed04" target="_blank" rel="noopener">NIDDK Disease Research and Translational Core Centers (P30 Clinical Trial Optional)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$28,000,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:NIDDKP30s@NIH.gov">NIDDKP30s@NIH.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/a97036b3-685a-4c33-8d2c-e2b6a705ca0d" target="_blank" rel="noopener">U.S. Embassy Praia Ambassador’s Special Self-Help (SSH) Program</a>
+        <span class="badge badge-open">Posted</span>
+      </td>
+      <td>U.S. Mission to Cape Verde</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$3,000 – $10,000</td>
+      <td><a href="mailto:PRAIAGRANTS@state.gov">PRAIAGRANTS@state.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/88b8f3fc-c8e0-4ab0-98e5-65a31953386d" target="_blank" rel="noopener">Public Affairs Section Notice of Funding Opportunity 2020</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>U.S. Mission to Cambodia</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$20,000</td>
+      <td><a href="mailto:PASExchanges@state.gov">PASExchanges@state.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/c48ba1b9-988b-42cd-8ea0-c98cad680ea7" target="_blank" rel="noopener">Annual Program Statement (APS) for Fiscal Year 2025</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>U.S. Mission to Tunisia</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$10,000 – $200,000</td>
+      <td><a href="mailto:benmohamedk@state.gov">benmohamedk@state.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/bc779217-71de-48ea-af41-d39ac6437ab2" target="_blank" rel="noopener">Conformance with the Egg Regulatory Program Standards</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>Food and Drug Administration</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$94,000</td>
+      <td class="nowrap">$47,000</td>
+      <td><a href="mailto:Danielle.Head@fda.hhs.gov">Danielle.Head@fda.hhs.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/cf0d0679-8e43-4034-833b-0aa6cca9a1de" target="_blank" rel="noopener">The NIDDK Disorders of Gastrointestinal Interoception Consortium Clinical Centers (DGIC)</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,500,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:terez.shea-donohue@nih.gov">terez.shea-donohue@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/dab12ed3-a896-4907-ab71-3436214fdc13" target="_blank" rel="noopener">The NIDDK Inflammatory Bowel Disease Genetics Consortium (IBDGC) Data Coordinating Center</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,600,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:Ludmila.pawlikowska@nih.gov">Ludmila.pawlikowska@nih.gov</a></td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://simpler.grants.gov/opportunity/ee02df6a-c51f-4045-8833-8c0dc02b2a39" target="_blank" rel="noopener">Cooperative Program for Modeling Clinical Transplantation</a>
+        <span class="badge badge-open">Forecasted</span>
+      </td>
+      <td>National Institutes of Health</td>
+      <td class="nowrap">—</td>
+      <td class="nowrap">$1,280,000</td>
+      <td class="nowrap">—</td>
+      <td><a href="mailto:CPMCT_U01@mail.nih.gov">CPMCT_U01@mail.nih.gov</a></td>
+    </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<div class="timestamp">
+  Data scraped: 2026-08-22T13:07:39.494Z<br>
+  Sources: 50 state agriculture department websites + <a href="https://www.grants.gov" target="_blank">Grants.gov</a>
+</div>
+
+<script>
+// Federal filtering
+function filterFederal() {
+  const query = document.getElementById('federal-search').value.toLowerCase();
+  const status = document.getElementById('federal-status-filter').value;
+  let visible = 0;
+  document.querySelectorAll('#federal-tbody tr').forEach(row => {
+    const text = row.textContent.toLowerCase();
+    const matchesQuery = !query || text.includes(query);
+    const badge = row.querySelector('.badge');
+    const rowStatus = badge ? badge.textContent.toLowerCase() : '';
+    const matchesStatus = status === 'all' || rowStatus === status;
+    const show = matchesQuery && matchesStatus;
+    row.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('federal-count').textContent = visible + ' of 140 opportunities';
+}
+filterFederal();
+
+// Table sorting
+let sortDir = {};
+function sortTable(col) {
+  const tbody = document.getElementById('federal-tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  sortDir[col] = !sortDir[col];
+  rows.sort((a, b) => {
+    const aText = a.children[col]?.textContent.trim() || '';
+    const bText = b.children[col]?.textContent.trim() || '';
+    if (col >= 3 && col <= 4) {
+      const aNum = parseFloat(aText.replace(/[^0-9.-]/g, '')) || 0;
+      const bNum = parseFloat(bText.replace(/[^0-9.-]/g, '')) || 0;
+      return sortDir[col] ? aNum - bNum : bNum - aNum;
+    }
+    return sortDir[col] ? aText.localeCompare(bText) : bText.localeCompare(aText);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "ag-grant-scraper",
+  "version": "2.0.0",
+  "description": "Scraper for agriculture grant opportunities across all 50 US states and Grants.gov",
+  "main": "scraper.mjs",
+  "type": "module",
+  "scripts": {
+    "scrape": "node scraper.mjs",
+    "scrape:json": "node scraper.mjs --json",
+    "scrape:states": "node scraper.mjs --states-only",
+    "scrape:grants-gov": "node scraper.mjs --grants-gov-only",
+    "build": "node build-page.mjs",
+    "scrape:urban": "node urban-scraper.mjs",
+    "refresh": "node scraper.mjs --json grants-search-*.csv > data.json && node urban-scraper.mjs && node build-page.mjs",
+    "refresh:no-urban": "node scraper.mjs --json grants-search-*.csv > data.json && node build-page.mjs",
+    "crawl": "node Tools/crawl-state.mjs"
+  },
+  "dependencies": {
+    "axios": "^1.7.0",
+    "cheerio": "^1.0.0",
+    "csv-parse": "^7.0.2"
+  }
+}

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CA — California Department of Food and Agriculture — Agriculture Grant Resources</title>
+<style>
+  :root {
+    --green-900: #1a3a1a;
+    --green-700: #2d5a2d;
+    --green-600: #3a7a3a;
+    --green-100: #e8f5e8;
+    --green-50: #f0faf0;
+    --gold-600: #b8860b;
+    --gold-100: #fef9e7;
+    --red-600: #c0392b;
+    --red-100: #fdecea;
+    --gray-50: #f8f9fa;
+    --gray-100: #e9ecef;
+    --gray-200: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-600: #6c757d;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    --shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.08);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,.1);
+    --radius: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--gray-50); color: var(--gray-900);
+    line-height: 1.6;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--green-900) 0%, var(--green-700) 100%);
+    color: #fff; padding: 3rem 2rem; text-align: center;
+  }
+  .hero h1 { margin: 0 0 .5rem; font-size: 2.2rem; font-weight: 700; }
+  .hero p { margin: 0; opacity: .85; font-size: 1.1rem; }
+  .hero a { color: #fff; }
+  .hero .stats {
+    display: flex; gap: 2rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap;
+  }
+  .hero .stat { text-align: center; }
+  .hero .stat-num { font-size: 2rem; font-weight: 700; display: block; }
+  .hero .stat-label { font-size: .85rem; opacity: .7; text-transform: uppercase; letter-spacing: .05em; }
+  .hero-compact { padding: 2rem 2rem 1.5rem; }
+  .hero-compact h1 { font-size: 1.8rem; }
+
+  /* Page nav (inter-page links) */
+  .page-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #fff; border-bottom: 1px solid var(--gray-200);
+    display: flex; justify-content: center; gap: 0; box-shadow: var(--shadow);
+  }
+  .page-nav a {
+    display: inline-block; padding: 1rem 2rem; text-decoration: none;
+    font-size: 1rem; font-weight: 500; color: var(--gray-600);
+    border-bottom: 3px solid transparent; transition: all .2s;
+  }
+  .page-nav a:hover { color: var(--green-700); }
+  .page-nav a.active { color: var(--green-700); border-bottom-color: var(--green-600); }
+
+  /* Filter bar */
+  .filter-bar {
+    max-width: 1200px; margin: 1.5rem auto; padding: 0 1.5rem;
+    display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+  }
+  .filter-bar input, .filter-bar select {
+    padding: .6rem 1rem; border: 1px solid var(--gray-400); border-radius: var(--radius);
+    font-size: .95rem; background: #fff;
+  }
+  .filter-bar input { flex: 1; min-width: 200px; }
+  .filter-bar select { min-width: 140px; }
+  .result-count { font-size: .85rem; color: var(--gray-600); margin-left: auto; }
+
+  /* Badges */
+  .badge {
+    display: inline-block; font-size: .7rem; font-weight: 600; padding: .15rem .5rem;
+    border-radius: 4px; text-transform: uppercase; letter-spacing: .03em; margin-left: .5rem;
+    vertical-align: middle;
+  }
+  .badge-open { background: var(--green-100); color: var(--green-700); }
+  .badge-closed { background: var(--red-100); color: var(--red-600); }
+  .badge-unknown { background: var(--gray-100); color: var(--gray-600); }
+  .badge-error { background: var(--red-100); color: var(--red-600); }
+  .badge-none { background: var(--gray-100); color: var(--gray-600); }
+  .badge-review { background: var(--gold-100); color: var(--gold-600); }
+
+  .timestamp { text-align: center; padding: 2rem; color: var(--gray-600); font-size: .85rem; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 1.5rem; }
+    .hero .stats { gap: 1rem; }
+    .page-nav a { padding: .75rem 1rem; font-size: .85rem; }
+    .filter-bar { flex-direction: column; }
+    .filter-bar input { min-width: 100%; }
+  }
+  .section { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+  .grant-item { padding: .75rem 0; border-top: 1px solid var(--gray-100); }
+  .grant-item:first-child { border-top: none; }
+  .grant-title { font-weight: 500; }
+  .grant-title a { color: var(--green-700); text-decoration: none; }
+  .grant-title a:hover { text-decoration: underline; }
+  .grant-meta { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .25rem; }
+  .meta-tag {
+    font-size: .8rem; background: var(--gray-100); color: var(--gray-800);
+    padding: .15rem .5rem; border-radius: 4px; word-break: break-word;
+  }
+  .docs { margin-top: .5rem; font-size: .85rem; }
+  .docs ul { margin: .25rem 0 0; padding-left: 1.2rem; }
+  .docs li { margin-bottom: .15rem; }
+  .docs a { color: var(--green-700); }
+  .error-msg { color: var(--red-600); font-size: .95rem; margin: 1rem 0; }
+  .grant-ambiguous {
+    background: var(--gold-100); border-radius: 4px;
+    padding: .75rem .5rem; margin: .25rem -.5rem;
+  }
+  .crawl-stats {
+    font-size: .85rem; color: var(--gray-600); font-style: italic; margin: .5rem 0 1rem;
+  }
+  .grants-section {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 1.25rem; border-left: 4px solid var(--green-600); margin-bottom: 1.5rem;
+  }
+  .grants-section h2 { margin: 0 0 .75rem; font-size: 1.2rem; color: var(--green-700); }
+
+  /* Discovery path */
+  .discovery-info {
+    margin-top: .5rem; font-size: .85rem; color: var(--gray-600);
+  }
+  .discovery-path ol {
+    margin: .25rem 0 0; padding-left: 1.5rem; font-size: .8rem;
+  }
+  .discovery-path li { margin-bottom: .15rem; word-break: break-all; }
+  .discovery-path a { color: var(--gray-600); }
+
+  /* Urban resources section */
+  .urban-section {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+    margin-bottom: 1.5rem; padding: 1.25rem; border-left: 4px solid var(--gold-600);
+  }
+  .urban-section h2 { margin: 0 0 .75rem; font-size: 1.2rem; color: var(--gold-600); }
+  .urban-item { padding: .5rem 0; border-top: 1px solid var(--gray-100); }
+  .urban-item:first-child { border-top: none; }
+  .urban-item a { color: var(--green-700); text-decoration: none; font-weight: 500; }
+  .urban-item a:hover { text-decoration: underline; }
+  .urban-context { font-size: .85rem; color: var(--gray-600); margin: .25rem 0 0; }
+  .urban-keywords { display: flex; gap: .25rem; flex-wrap: wrap; margin-top: .25rem; }
+  .urban-keyword {
+    font-size: .7rem; background: var(--gold-100); color: var(--gold-600);
+    padding: .1rem .4rem; border-radius: 3px; font-weight: 600;
+  }
+
+  /* National orgs */
+  .national-orgs {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+    margin-bottom: 1.5rem; padding: 1.25rem; border-left: 4px solid #4a90d9;
+  }
+  .national-orgs h2 { margin: 0 0 .75rem; font-size: 1.2rem; color: #4a90d9; }
+  .national-orgs .org-card {
+    padding: .75rem 0; border-top: 1px solid var(--gray-100);
+  }
+  .national-orgs .org-card:first-child { border-top: none; }
+  .national-orgs .org-name { font-weight: 600; }
+  .national-orgs .org-name a { color: var(--green-700); text-decoration: none; }
+  .national-orgs .org-name a:hover { text-decoration: underline; }
+  .national-orgs .org-resources { margin-top: .25rem; padding-left: 1rem; font-size: .9rem; }
+  .national-orgs .org-resources li { margin-bottom: .2rem; }
+  .national-orgs .org-resources a { color: var(--green-700); text-decoration: none; }
+  .national-orgs .org-resources a:hover { text-decoration: underline; }
+
+  .back-link {
+    display: inline-block; margin-bottom: 1rem; color: var(--green-700);
+    text-decoration: none; font-size: .9rem; font-weight: 500;
+  }
+  .back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="hero hero-compact">
+  <h1>CA — California Department of Food and Agriculture</h1>
+  <p><a href="https://www.cdfa.ca.gov" target="_blank" rel="noopener">https://www.cdfa.ca.gov</a></p>
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-num">7</span>
+      <span class="stat-label">Grants Found</span>
+    </div>
+    
+    
+    
+    
+  </div>
+</div>
+
+
+<div class="page-nav">
+  <a href="../index.html" class="">Home</a>
+  <a href="../state-grants.html" class="active">State Grants</a>
+  <a href="../federal-grants.html" class="">Federal Grants</a>
+</div>
+
+<div class="section">
+  <a href="../state-grants.html" class="back-link">&larr; Back to all states</a>
+
+  
+  
+
+  
+  <div class="grants-section">
+    <h2>Grant References (7)</h2>
+    
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://www.cdfa.ca.gov/grants/" target="_blank" rel="noopener">Office of Grant Administration Homepage</a>
+        <span class="badge badge-unknown">Unknown</span>
+      </div>
+      <div class="grant-meta">
+        <span class="meta-tag">Amounts: $6.29, $2, $500,000</span>
+        <span class="meta-tag">Deadlines: 5/15/2026</span>
+      </div>
+      <div class="docs"><strong>Documents (5):</strong><ul><li><a href="https://www.cdfa.ca.gov/grants/pdf/TechAssistProviderResource_CDFAprogramsForProducers.pdf" target="_blank" rel="noopener">Technical Assistance Provider Resource – CDFA Programs for Producers</a></li><li><a href="https://www.cdfa.ca.gov/Regulations/General/FinalGrantAdminRegs-Text.pdf" target="_blank" rel="noopener">Grant Administration Regulations</a></li><li><a href="https://www.cdfa.ca.gov/Regulations/General/FinalSelectedItemsofCost_Guidance.pdf" target="_blank" rel="noopener">Selected Items of Cost</a></li><li><a href="https://www.rd.usda.gov/newsroom/federal-funding-opportunities" target="_blank" rel="noopener">Federal Notices of Solicitation of Applications (USDA – Rural Development)</a></li><li><a href="https://www.cdfa.ca.gov/pdfs/CDFA_Accessibility_Certification.pdf" target="_blank" rel="noopener">Website Accessibility Certification</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://www.cdfa.ca.gov/farmerresources/grant_programs.html" target="_blank" rel="noopener">Grants for Farmers</a>
+        <span class="badge badge-unknown">Unknown</span>
+      </div>
+      <div class="grant-meta">
+        
+        
+      </div>
+      <div class="docs"><strong>Documents (2):</strong><ul><li><a href="https://www.cdfa.ca.gov/farmerresources/grant_programs.html#collapseOne" target="_blank" rel="noopener">Application Assistance ProgramsIf you need direct assistance to apply for a CDFA grant program, these programs offer one-on-one direct assistance for agricultural producers.</a></li><li><a href="https://www.cdfa.ca.gov/pdfs/CDFA_Accessibility_Certification.pdf" target="_blank" rel="noopener">Accessibility Certification</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://www.cdfa.ca.gov/Regulations.html#grants" target="_blank" rel="noopener">CDFA — General Regulations</a>
+        <span class="badge badge-unknown">Unknown</span>
+      </div>
+      <div class="grant-meta">
+        <span class="meta-tag">Amounts: $0.25, $100</span>
+        
+      </div>
+      <div class="docs"><strong>Documents (1):</strong><ul><li><a href="https://www.cdfa.ca.gov/pdfs/CDFA_Accessibility_Certification.pdf" target="_blank" rel="noopener">Website Accessibility Certification</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://pressreleases.cdfa.ca.gov/Home/PressRelease/69594486" target="_blank" rel="noopener">News CDFA accepting public comment for CA Farm to School Incubator Grant Program Request for Applications Read</a>
+        <span class="badge badge-unknown">Unknown</span>
+      </div>
+      <div class="grant-meta">
+        <span class="meta-tag">Amounts: $40, $86</span>
+        
+      </div>
+      <div class="docs"><strong>Documents (1):</strong><ul><li><a href="https://www.cdfa.ca.gov/pdfs/CDFA_Accessibility_Certification.pdf" target="_blank" rel="noopener">Website Accessibility Certification</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://www.cdfa.ca.gov/caf2sgrant/" target="_blank" rel="noopener">Farm to School Incubator Grant Program</a>
+        <span class="badge badge-open">Open</span>
+      </div>
+      <div class="grant-meta">
+        <span class="meta-tag">Amounts: $8, $25, $52, $38, $8.49</span>
+        
+      </div>
+      <div class="docs"><strong>Documents (49):</strong><ul><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Cohort_4_F2S_Grant_Draft_RFA_Track_1.pdf" target="_blank" rel="noopener">Track 1: Draft Request for Applications (RFA)</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Cohort_4_F2S_Grant_Draft_Application_Track_1.pdf" target="_blank" rel="noopener">Track 1: Draft Application Questions</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Cohort_4_F2S_Grant_Draft_Review_Criteria_Track_1.pdf" target="_blank" rel="noopener">Track 1: Draft Review Criteria</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Cohort_4_F2S_Grant_Draft_RFA_Track_2.pdf" target="_blank" rel="noopener">Track 2: Draft Request for Applications (RFA)</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Cohort_4_F2S_Grant_Draft_Application_Track_2.pdf" target="_blank" rel="noopener">Track 2: Draft Application Questions</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Cohort_4_F2S_Grant_Draft_Review_Criteria_Track_2.pdf" target="_blank" rel="noopener">Track 2: Draft Review Criteria</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Subaward_Guidelines_Track_2.pdf" target="_blank" rel="noopener">Track 2: Subaward Guidelines</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Community_Collaboration_Matrix_Track_2.pdf" target="_blank" rel="noopener">Track 2: Community Collaboration Matrix</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Cohort_4_F2S_Grant_Draft_RFA_Track_3.pdf" target="_blank" rel="noopener">Track 3: Draft Request for Applications (RFA)</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Cohort_4_F2S_Grant_Draft_RFA_Track_3_(Spanish).pdf" target="_blank" rel="noopener">Track 3: Draft Request for Applications (RFA) (Spanish)</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Cohort_4_F2S_Grant_Draft_Application_Track_3.pdf" target="_blank" rel="noopener">Track 3: Draft Application Questions</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Cohort_4_F2S_Grant_Draft_Application_Track_3_(Spanish).pdf" target="_blank" rel="noopener">Track 3: Draft Application Questions (Spanish)</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Cohort_4_F2S_Grant_Draft_Review_Criteria_Track_3.pdf" target="_blank" rel="noopener">Track 3: Draft Review Criteria</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Cohort_4_F2S_Grant_Draft_Review_Criteria_Track_3_(Spanish).pdf" target="_blank" rel="noopener">Track 3: Draft Review Criteria (Spanish)</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Letter_of_Intent_Track_3.pdf" target="_blank" rel="noopener">Track 3: Letter of Intent</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Letter_of_Intent_Track_3_(Spanish).pdf" target="_blank" rel="noopener">Track 3: Letter of Intent (Spanish)</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Food_Hub_Producer_Sourcing_Network_Track_3.pdf" target="_blank" rel="noopener">Track 3: Food Hub Producer Sourcing Network</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2026/Food_Hub_Producer_Sourcing_Network_Track_3_(Spanish).pdf" target="_blank" rel="noopener">Track 3: Food Hub Producer Sourcing Network (Spanish)</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2023-24_CA_F2S_Incubator_Grant_Program_Project_Summaries_FINAL.pdf" target="_blank" rel="noopener">List of 2023-24 CA Farm to School Incubator Grant Program Award Recipients</a></li><li><a href="https://www.cdfa.ca.gov/exec/Public_Affairs/Press_Releases/Archive/pr.html?id=24-023" target="_blank" rel="noopener">Press Release: CDFA Accepting Applications for 2023-24 CA Farm to School Grant Program</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2023-24_RFA_CA_Farm_to_School_IGP.pdf" target="_blank" rel="noopener">2023-24 Request for Applications</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2023-24_Track_1_Application_Questions_and_Review_Criteria.pdf" target="_blank" rel="noopener">Track 1: Application Questions and Review Criteria</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2023-24_Track_2_Application_Questions_and_Review_Criteria.pdf" target="_blank" rel="noopener">Track 2: Application Questions and Review Criteria</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2023-24_Track_3_Application_Questions_and_Review_Criteria.pdf" target="_blank" rel="noopener">Track 3: Application Questions and Review Criteria</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2023-24_Track_4_Application_Questions_and_Review_Criteria.pdf" target="_blank" rel="noopener">Track 4: Application Questions and Review Criteria</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/Budget_Template_Worksheet_2023-24_CDFA_Farm_ to_School_IGP.xlsx" target="_blank" rel="noopener">2023-24 Budget Worksheet</a></li><li><a href="https://www.cdfa.ca.gov/forms/docs/f2f-020_farm-to-school_incubator_grant_letter_of_intent_template.pdf" target="_blank" rel="noopener">2023-24 Letter of Intent Template (Track 4 only)</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/Eligibility_Decision_Tree_2023-24_CA_Farm_to_School_Incubator_Grant_Program.pdf" target="_blank" rel="noopener">Eligibility Decision Tree</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/Previous_Grant_Recipients_SupplementVsReplace_2023-24_CA_Farm_to_School_IGP.pdf" target="_blank" rel="noopener">Previous Grant Recipients Decision Tree</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/questions_and_answers_2023-24_cdfa_farm_to_school_incubator_grant_program.pdf" target="_blank" rel="noopener">Questions &amp; Answers (as of April 4, 2024)</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/grant_info_session_slides_2023-24_cdfa_farm_to_school_incubator_grant_program.pdf" target="_blank" rel="noopener">Info Session Slide Deck (English)</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/grant_info_session_slides_2023-24_cdfa_farm_to_school_incubator_grant_program-spanish.pdf" target="_blank" rel="noopener">Info Session Slide Deck (Spanish)</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/info_session_slides_public_comment_period_2023-24_cdfa_farm_to_school_incubator_grant_program.pdf" target="_blank" rel="noopener">Public Info Session Slide Deck</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/Summary_of_Public_Comments _CDFA_Responses_2023-24_CA_F2S_IGP.pdf" target="_blank" rel="noopener">Summary of Public Comments and CDFA Responses</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2022_CA_F2S_Incubator_Grant_Program_Award_Recipients_List.pdf" target="_blank" rel="noopener">List of 2022 CA Farm to School Incubator Grant Program Award Recipients</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/final_project_summaries_2022_ca_f2s_incubator_grant_program.pdf" target="_blank" rel="noopener">Read the 2022 CA Farm to School Incubator Grant Program Project Summaries</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2022_request_for_applications.pdf" target="_blank" rel="noopener">2022 Request for Applications</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/track_1_application_questions_and_review_criteria.pdf" target="_blank" rel="noopener">Track 1 Application Questions and Review Criteria</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/track_2_application_questions_and_review_criteria.pdf" target="_blank" rel="noopener">Track 2 Application Questions and Review Criteria</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/track_3_application_questions_and_review_criteria.pdf" target="_blank" rel="noopener">Track 3 Application Questions and Review Criteria</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/track_4_application_questions_and_review_criteria.pdf" target="_blank" rel="noopener">Track 4 Application Questions and Review Criteria</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2022_webinar_slide_deck.pdf" target="_blank" rel="noopener">2022 Webinar Slide Deck</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/2022_questions_and_answers.pdf" target="_blank" rel="noopener">2022 Questions and Answers</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/Public_Info_Session_Slide_Deck_v2.pdf" target="_blank" rel="noopener">Public Info Session Slide Deck</a></li><li><a href="https://www.cdfa.ca.gov/caf2sgrant/docs/summary_of_public_comments_and_cdfa_responses.pdf" target="_blank" rel="noopener">Summary of Public Comments and CDFA Responses</a></li><li><a href="https://www.cdfa.ca.gov/grants/docs/Summaries_of_Submitted_Project_Narratives_2021_CDFA_F2S_Incubator_Grant_Program.pdf" target="_blank" rel="noopener">2021 Farm to School Incubator Grant Program Awardees</a></li><li><a href="https://www.cdfa.ca.gov/grants/pdf/2021_Farm_to_School_Incubator_RFA.pdf" target="_blank" rel="noopener">2021 Request for Applications</a></li><li><a href="https://www.cdfa.ca.gov/grants/pdf/2021_Farm_to_School_Summary_Public_Comments_Responses.pdf" target="_blank" rel="noopener">2021 Summary of Public Comments and Responses</a></li><li><a href="https://www.cdfa.ca.gov/pdfs/CDFA_Accessibility_Certification.pdf" target="_blank" rel="noopener">Website Accessibility Certification</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://www.cdfa.ca.gov/Specialty_Crop_Competitiveness_Grants" target="_blank" rel="noopener">Specialty Crop Block Grant Program</a>
+        
+      </div>
+      <div class="grant-meta">
+        
+        
+      </div>
+      
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        CDFA accepting public comment for CA Farm to School Incubator Grant Program Request for Applications
+        
+      </div>
+      <div class="grant-meta">
+        
+        
+      </div>
+      
+      
+    </div>
+  </div>
+
+  
+
+  
+    <div class="national-orgs">
+      <h2>National Urban Agriculture Organizations</h2>
+      <p style="font-size:.9rem;color:var(--gray-600);margin:0 0 .75rem">Federal and national resources for urban farming grants and programs.</p>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.usda.gov/topics/urban" target="_blank" rel="noopener">USDA Urban Agriculture</a></div>
+      </div>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.nifa.usda.gov/topics/urban-agriculture" target="_blank" rel="noopener">NIFA Urban Agriculture</a></div>
+      </div>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.usda.gov/peoples-garden" target="_blank" rel="noopener">USDA People's Garden Initiative</a></div>
+      </div>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.communitygarden.org" target="_blank" rel="noopener">American Community Gardening Association</a></div>
+      </div>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.usda.gov/topics/farming/beginning-farmers" target="_blank" rel="noopener">USDA Beginning Farmers and Ranchers</a></div>
+      </div>
+    </div>
+</div>
+
+
+<div class="timestamp">
+  Data scraped: 2026-08-22T13:07:39.494Z<br>
+  Sources: 50 state agriculture department websites + <a href="https://www.grants.gov" target="_blank">Grants.gov</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SD — South Dakota Department of Agriculture and Natural Resources — Agriculture Grant Resources</title>
+<style>
+  :root {
+    --green-900: #1a3a1a;
+    --green-700: #2d5a2d;
+    --green-600: #3a7a3a;
+    --green-100: #e8f5e8;
+    --green-50: #f0faf0;
+    --gold-600: #b8860b;
+    --gold-100: #fef9e7;
+    --red-600: #c0392b;
+    --red-100: #fdecea;
+    --gray-50: #f8f9fa;
+    --gray-100: #e9ecef;
+    --gray-200: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-600: #6c757d;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    --shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.08);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,.1);
+    --radius: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--gray-50); color: var(--gray-900);
+    line-height: 1.6;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--green-900) 0%, var(--green-700) 100%);
+    color: #fff; padding: 3rem 2rem; text-align: center;
+  }
+  .hero h1 { margin: 0 0 .5rem; font-size: 2.2rem; font-weight: 700; }
+  .hero p { margin: 0; opacity: .85; font-size: 1.1rem; }
+  .hero a { color: #fff; }
+  .hero .stats {
+    display: flex; gap: 2rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap;
+  }
+  .hero .stat { text-align: center; }
+  .hero .stat-num { font-size: 2rem; font-weight: 700; display: block; }
+  .hero .stat-label { font-size: .85rem; opacity: .7; text-transform: uppercase; letter-spacing: .05em; }
+  .hero-compact { padding: 2rem 2rem 1.5rem; }
+  .hero-compact h1 { font-size: 1.8rem; }
+
+  /* Page nav (inter-page links) */
+  .page-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #fff; border-bottom: 1px solid var(--gray-200);
+    display: flex; justify-content: center; gap: 0; box-shadow: var(--shadow);
+  }
+  .page-nav a {
+    display: inline-block; padding: 1rem 2rem; text-decoration: none;
+    font-size: 1rem; font-weight: 500; color: var(--gray-600);
+    border-bottom: 3px solid transparent; transition: all .2s;
+  }
+  .page-nav a:hover { color: var(--green-700); }
+  .page-nav a.active { color: var(--green-700); border-bottom-color: var(--green-600); }
+
+  /* Filter bar */
+  .filter-bar {
+    max-width: 1200px; margin: 1.5rem auto; padding: 0 1.5rem;
+    display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+  }
+  .filter-bar input, .filter-bar select {
+    padding: .6rem 1rem; border: 1px solid var(--gray-400); border-radius: var(--radius);
+    font-size: .95rem; background: #fff;
+  }
+  .filter-bar input { flex: 1; min-width: 200px; }
+  .filter-bar select { min-width: 140px; }
+  .result-count { font-size: .85rem; color: var(--gray-600); margin-left: auto; }
+
+  /* Badges */
+  .badge {
+    display: inline-block; font-size: .7rem; font-weight: 600; padding: .15rem .5rem;
+    border-radius: 4px; text-transform: uppercase; letter-spacing: .03em; margin-left: .5rem;
+    vertical-align: middle;
+  }
+  .badge-open { background: var(--green-100); color: var(--green-700); }
+  .badge-closed { background: var(--red-100); color: var(--red-600); }
+  .badge-unknown { background: var(--gray-100); color: var(--gray-600); }
+  .badge-error { background: var(--red-100); color: var(--red-600); }
+  .badge-none { background: var(--gray-100); color: var(--gray-600); }
+  .badge-review { background: var(--gold-100); color: var(--gold-600); }
+
+  .timestamp { text-align: center; padding: 2rem; color: var(--gray-600); font-size: .85rem; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 1.5rem; }
+    .hero .stats { gap: 1rem; }
+    .page-nav a { padding: .75rem 1rem; font-size: .85rem; }
+    .filter-bar { flex-direction: column; }
+    .filter-bar input { min-width: 100%; }
+  }
+  .section { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+  .grant-item { padding: .75rem 0; border-top: 1px solid var(--gray-100); }
+  .grant-item:first-child { border-top: none; }
+  .grant-title { font-weight: 500; }
+  .grant-title a { color: var(--green-700); text-decoration: none; }
+  .grant-title a:hover { text-decoration: underline; }
+  .grant-meta { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .25rem; }
+  .meta-tag {
+    font-size: .8rem; background: var(--gray-100); color: var(--gray-800);
+    padding: .15rem .5rem; border-radius: 4px; word-break: break-word;
+  }
+  .docs { margin-top: .5rem; font-size: .85rem; }
+  .docs ul { margin: .25rem 0 0; padding-left: 1.2rem; }
+  .docs li { margin-bottom: .15rem; }
+  .docs a { color: var(--green-700); }
+  .error-msg { color: var(--red-600); font-size: .95rem; margin: 1rem 0; }
+  .grant-ambiguous {
+    background: var(--gold-100); border-radius: 4px;
+    padding: .75rem .5rem; margin: .25rem -.5rem;
+  }
+  .crawl-stats {
+    font-size: .85rem; color: var(--gray-600); font-style: italic; margin: .5rem 0 1rem;
+  }
+  .grants-section {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 1.25rem; border-left: 4px solid var(--green-600); margin-bottom: 1.5rem;
+  }
+  .grants-section h2 { margin: 0 0 .75rem; font-size: 1.2rem; color: var(--green-700); }
+
+  /* Discovery path */
+  .discovery-info {
+    margin-top: .5rem; font-size: .85rem; color: var(--gray-600);
+  }
+  .discovery-path ol {
+    margin: .25rem 0 0; padding-left: 1.5rem; font-size: .8rem;
+  }
+  .discovery-path li { margin-bottom: .15rem; word-break: break-all; }
+  .discovery-path a { color: var(--gray-600); }
+
+  /* Urban resources section */
+  .urban-section {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+    margin-bottom: 1.5rem; padding: 1.25rem; border-left: 4px solid var(--gold-600);
+  }
+  .urban-section h2 { margin: 0 0 .75rem; font-size: 1.2rem; color: var(--gold-600); }
+  .urban-item { padding: .5rem 0; border-top: 1px solid var(--gray-100); }
+  .urban-item:first-child { border-top: none; }
+  .urban-item a { color: var(--green-700); text-decoration: none; font-weight: 500; }
+  .urban-item a:hover { text-decoration: underline; }
+  .urban-context { font-size: .85rem; color: var(--gray-600); margin: .25rem 0 0; }
+  .urban-keywords { display: flex; gap: .25rem; flex-wrap: wrap; margin-top: .25rem; }
+  .urban-keyword {
+    font-size: .7rem; background: var(--gold-100); color: var(--gold-600);
+    padding: .1rem .4rem; border-radius: 3px; font-weight: 600;
+  }
+
+  /* National orgs */
+  .national-orgs {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+    margin-bottom: 1.5rem; padding: 1.25rem; border-left: 4px solid #4a90d9;
+  }
+  .national-orgs h2 { margin: 0 0 .75rem; font-size: 1.2rem; color: #4a90d9; }
+  .national-orgs .org-card {
+    padding: .75rem 0; border-top: 1px solid var(--gray-100);
+  }
+  .national-orgs .org-card:first-child { border-top: none; }
+  .national-orgs .org-name { font-weight: 600; }
+  .national-orgs .org-name a { color: var(--green-700); text-decoration: none; }
+  .national-orgs .org-name a:hover { text-decoration: underline; }
+  .national-orgs .org-resources { margin-top: .25rem; padding-left: 1rem; font-size: .9rem; }
+  .national-orgs .org-resources li { margin-bottom: .2rem; }
+  .national-orgs .org-resources a { color: var(--green-700); text-decoration: none; }
+  .national-orgs .org-resources a:hover { text-decoration: underline; }
+
+  .back-link {
+    display: inline-block; margin-bottom: 1rem; color: var(--green-700);
+    text-decoration: none; font-size: .9rem; font-weight: 500;
+  }
+  .back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="hero hero-compact">
+  <h1>SD — South Dakota Department of Agriculture and Natural Resources</h1>
+  <p><a href="https://danr.sd.gov" target="_blank" rel="noopener">https://danr.sd.gov</a></p>
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-num">6</span>
+      <span class="stat-label">Grants Found</span>
+    </div>
+    
+    
+    
+    
+  </div>
+</div>
+
+
+<div class="page-nav">
+  <a href="../index.html" class="">Home</a>
+  <a href="../state-grants.html" class="active">State Grants</a>
+  <a href="../federal-grants.html" class="">Federal Grants</a>
+</div>
+
+<div class="section">
+  <a href="../state-grants.html" class="back-link">&larr; Back to all states</a>
+
+  
+  
+
+  
+  <div class="grants-section">
+    <h2>Grant References (6)</h2>
+    
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://danr.sd.gov/Environment/MineralsMining/default.aspx" target="_blank" rel="noopener">MINERALS, MINING, &amp; SUPERFUND</a>
+        <span class="badge badge-closed">Closed</span>
+      </div>
+      <div class="grant-meta">
+        <span class="meta-tag">Amounts: $500, $3,850, $20,000, $300,000, $1,500, $100,000, $2,750, $200,000, $2,500, $38,500</span>
+        
+      </div>
+      <div class="docs"><strong>Documents (5):</strong><ul><li><a href="https://danr.sd.gov/Environment/MineralsMining/docs/publications/Goldrpt11.pdf" target="_blank" rel="noopener">2011 Summary of the Mining Industry in South Dakota</a></li><li><a href="https://danr.sd.gov/Environment/MineralsMining/docs/publications/2008stat.pdf" target="_blank" rel="noopener">2008 Mineral Summary for South Dakota</a></li><li><a href="https://danr.sd.gov/Environment/MineralsMining/default.aspx#" target="_blank" rel="noopener">Pending Applications</a></li><li><a href="https://danr.sd.gov/Environment/MineralsMining/Exploration/NewEXNIS.aspx" target="_blank" rel="noopener">Pending EXNI Applications</a></li><li><a href="https://danr.sd.gov/ContactUs/docs/DANR%20Nondiscrimination%20Policy.pdf" target="_blank" rel="noopener">Nondiscrimination Policy (PDF)</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/default.aspx" target="_blank" rel="noopener">SPECIALTY CROP BLOCK GRANT</a>
+        <span class="badge badge-closed">Closed</span>
+      </div>
+      <div class="grant-meta">
+        <span class="meta-tag">Amounts: $3,207,856</span>
+        
+      </div>
+      <div class="docs"><strong>Documents (23):</strong><ul><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2026/2026%20DANR%20SCBG%20RFP%20Final.pdf" target="_blank" rel="noopener">2026 Request for Proposals (PDF)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2025/2025%20SD%20Office%20Hours%20SCBG%20Presentation.pdf" target="_blank" rel="noopener">SCBG Office Hours Presentation (PDF)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2026/Application%20Cover%20Sheet%20Updated%202026%20fillable.pdf" target="_blank" rel="noopener">Application Cover Sheet (PDF)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2025/SCBGP%20Project%20Profile%20Template%202025.pdf" target="_blank" rel="noopener">Application Project Profile Template (PDF)</a></li><li><a href="https://www.ams.usda.gov/sites/default/files/media/FY26AMSGDGeneralTermsandConditions.pdf" target="_blank" rel="noopener">Terms and Conditions (PDF)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2026/Applicant%20SCBG%20Checklist%20Updated%202026%20Clean.docx" target="_blank" rel="noopener">Applicant Checklist (Word Document)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2026/SD%20FY26%20Priorities.pdf" target="_blank" rel="noopener">2026 South Dakota Priorities (PDF)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2026/Outcomes%20and%20Indicators%20Worksheet%202026%20Update.pdf" target="_blank" rel="noopener">Outcomes and Indicators Worksheet (PDF)</a></li><li><a href="https://bfm.sd.gov/vendor/Substitute_W-9_SD.pdf" target="_blank" rel="noopener">W-9 Form (PDF)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/Assurances.pdf" target="_blank" rel="noopener">Assurances (PDF)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2025/DANR%20SCBG%20Reimbursement%20Form%20updated.docx" target="_blank" rel="noopener">Reimbursement Form (Word)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2025/DANR%20SCBG%20Reimbursement%20Form%20updated%20fillable.pdf" target="_blank" rel="noopener">Reimbursement Form (PDF Fillable)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/SCBGP%20Performance%20Progress%20Report%20Template%20for%202021%20and%20Prior%20(Adobe%20Reader%20Extended).pdf" target="_blank" rel="noopener">Performance Progress Report - 2021 &amp; Prior (PDF)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/SCBGP%20Performance%20Progress%20Report%20Template%20for%202022%20and%20Forward%20(Adobe%20Reader%20Extended).pdf" target="_blank" rel="noopener">Performance Progress Report - 2022 &amp; Forward (PDF)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs//2024_Information_Directory.pdf" target="_blank" rel="noopener">2024 Information Directory</a></li><li><a href="https://danr.sd.gov/Press/Forms.aspx" target="_blank" rel="noopener">Forms &amp; Applications Page</a></li><li><a href="https://danr.sd.gov/ContactUs/docs/DANR%20Nondiscrimination%20Policy.pdf" target="_blank" rel="noopener">Nondiscrimination Policy (PDF)</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2018/SDSPA%202018%20SCBG%20Final%20Report.pdf" target="_blank" rel="noopener">Document</a></li><li><a href="https://sdspecialtyproducers.org/wp-content/uploads/2022/03/FM-Resource-Outline-2022-version.pdf" target="_blank" rel="noopener">Document</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2018/ECSD%202018%20SCBG%20Final%20Report.pdf" target="_blank" rel="noopener">Document</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2018/Rebel%20Earth%202018%20SCBG%20Final%20Report.pdf" target="_blank" rel="noopener">Document</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2018/SDSU%20Rhoda%20Burrows%202018%20SCBG%20Final%20Report.pdf" target="_blank" rel="noopener">Document</a></li><li><a href="https://danr.sd.gov/Conservation/SpecialtyCropBlockGrant/docs/2018/Dakota%20Hops%202018%20SCBG%20Final%20Report.pdf" target="_blank" rel="noopener">Document</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://danr.sd.gov/Funding/default.aspx" target="_blank" rel="noopener">FINANCE &amp; TECHNICAL ASSISTANCE</a>
+        <span class="badge badge-closed">Closed</span>
+      </div>
+      <div class="grant-meta">
+        
+        
+      </div>
+      <div class="docs"><strong>Documents (26):</strong><ul><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/April2022Apps/default.aspx" target="_blank" rel="noopener">Submitted Funding Applications</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/2025/Interest%20Rates%20-%20September%202025.pdf" target="_blank" rel="noopener">September 25, 2025 Interest Rates</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/2021_Unemployment.pdf" target="_blank" rel="noopener">2021 Average Annual Unemployment Statistics</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/2020_MHI.pdf" target="_blank" rel="noopener">2020 MHI 5-Year Estimates</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/6-2025%20DANR%20SRF%20General%20Conditions.pdf" target="_blank" rel="noopener">SRF General Conditions (June 2025) (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/6-2025%20BABAA_DANR%20SRF%20General%20Conditions.pdf" target="_blank" rel="noopener">SRF General Conditions with BABAA (June 2025) (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/2026/2026%20CW%20IUP%20a-3.pdf" target="_blank" rel="noopener">2026 Clean Water SRF IUP and BIL Addendum Amendment 3 (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/2026/2026%20DW%20IUP%20a-3.pdf" target="_blank" rel="noopener">2026 Drinking Water SRF IUP and BIL Addendum Amendment 3 (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/2025/2025%20CW%20IUP%20Amendment%205.pdf" target="_blank" rel="noopener">2025 Clean Water SRF IUP Amendment 5 (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/2025/2025%20DW%20IUP%20Amendment%204.pdf" target="_blank" rel="noopener">2025 Drinking Water SRF IUP Amendment 4 (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/2026%20State%20Water%20Plan.pdf" target="_blank" rel="noopener">2026 State Water Plan (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/2025%20ANNUAL%20BWNR-Final.pdf" target="_blank" rel="noopener">2025 State Water Annual Report (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/SD0427LDV4-CapacityAssmWorkSheet.pdf" target="_blank" rel="noopener">Capacity Assessment Worksheets for Public Water Systems (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/SD0487LDV4-StateWaterPlanApp.pdf" target="_blank" rel="noopener">State Water Plan Application (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/SD2126LDV7-DWFApp.pdf" target="_blank" rel="noopener">Drinking Water Facilities Funding Application (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/SD2127LDV6-SSSFApp.pdf" target="_blank" rel="noopener">Sanitary/Storm Sewer Facilities Funding Application (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/SD0482LDV4-SWMPApp.pdf" target="_blank" rel="noopener">Solid Waste Management Program Application (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/SD2133LDV4-SmallWaterApp.pdf" target="_blank" rel="noopener">Small Water Facilities Funding Application (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/SD0491LDV5-SWRMSApp.pdf" target="_blank" rel="noopener">State Water Resources Management System (SWRMS) Application (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/SD2128LDV4-WatershedApp.pdf" target="_blank" rel="noopener">Watershed Restoration Project Funding Application (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/SD1904LDV4-SCPGApp.pdf" target="_blank" rel="noopener">Small Community Planning Grant Application (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/SD2129LDV4-SRFInterimApp.pdf" target="_blank" rel="noopener">SRF Interim Financing Application (PDF)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/EFP_Payment_Request_Form.xls" target="_blank" rel="noopener">Environmental Funding Program Reimbursement Request (Excel)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/SRF_Payment_Request_Form.xls" target="_blank" rel="noopener">State Revolving Fund Loan Reimbursement Request (Excel)</a></li><li><a href="https://danr.sd.gov/Funding/EnviromentalFunding/docs/waterwasteforms/Planning%20District%20Payment%20Request%20Form%2001-26.pdf" target="_blank" rel="noopener">Planning District Payment Request Form (PDF)</a></li><li><a href="https://danr.sd.gov/ContactUs/docs/DANR%20Nondiscrimination%20Policy.pdf" target="_blank" rel="noopener">Nondiscrimination Policy (PDF)</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://danr.sd.gov/Funding/AgricultureMediation/default.aspx" target="_blank" rel="noopener">AGRICULTURAL MEDIATION</a>
+        <span class="badge badge-closed">Closed</span>
+      </div>
+      <div class="grant-meta">
+        <span class="meta-tag">Amounts: $50,000, $100.00, $25.00, $200.00</span>
+        
+      </div>
+      <div class="docs"><strong>Documents (8):</strong><ul><li><a href="https://danr.sd.gov/Funding/AgricultureMediation/docs/RequestforMediation.pdf" target="_blank" rel="noopener">View details »</a></li><li><a href="https://danr.sd.gov/Funding/AgricultureMediation/docs/RequestforMediation.pdf" target="_blank" rel="noopener">Mandatory Mediation</a></li><li><a href="https://danr.sd.gov/Funding/AgricultureMediation/docs/RequestforMediation.pdf" target="_blank" rel="noopener">Voluntary Mediation</a></li><li><a href="https://danr.sd.gov/Funding/AgricultureMediation/docs/Fl_OG%20VoluntaryForm.pdf" target="_blank" rel="noopener">Federal Lands</a></li><li><a href="https://danr.sd.gov/Funding/AgricultureMediation/docs/Fl_OG%20VoluntaryForm.pdf" target="_blank" rel="noopener">Oil &amp; Gas</a></li><li><a href="https://danr.sd.gov/Funding/AgricultureMediation/docs/WaterDrainageVoluntaryForm1.pdf" target="_blank" rel="noopener">Water Drainage</a></li><li><a href="https://danr.sd.gov/Funding/AgricultureMediation/docs/Intervener%20Request001.pdf" target="_blank" rel="noopener">form</a></li><li><a href="https://danr.sd.gov/ContactUs/docs/DANR%20Nondiscrimination%20Policy.pdf" target="_blank" rel="noopener">Nondiscrimination Policy (PDF)</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://danr.sd.gov/Funding/checkoff/default.aspx" target="_blank" rel="noopener">CHECKOFF REMITTANCE</a>
+        <span class="badge badge-closed">Closed</span>
+      </div>
+      <div class="grant-meta">
+        <span class="meta-tag">Amounts: $17</span>
+        
+      </div>
+      <div class="docs"><strong>Documents (4):</strong><ul><li><a href="https://danr.sd.gov/AboutDANR/docs/Unified%20Checkoff%20Remittance%20form%20UPDATED%204.16.21.pdf" target="_blank" rel="noopener">View details »</a></li><li><a href="https://danr.sd.gov/AboutDANR/docs/Unified%20Checkoff%20Remittance%20form.docx" target="_blank" rel="noopener">here</a></li><li><a href="https://danr.sd.gov/AboutDANR/docs/DANR%20Org%20Chart%20-%20Who%20To%20Call%20(Nov%202021).pdf" target="_blank" rel="noopener">Who To Call</a></li><li><a href="https://danr.sd.gov/ContactUs/docs/DANR%20Nondiscrimination%20Policy.pdf" target="_blank" rel="noopener">Nondiscrimination Policy (PDF)</a></li></ul></div>
+      
+    </div>
+    <div class="grant-item">
+      <div class="grant-title">
+        <a href="https://danr.sd.gov/Funding/EnviromentalFunding/default.aspx" target="_blank" rel="noopener">ENVIRONMENTAL FUNDING</a>
+        
+      </div>
+      <div class="grant-meta">
+        
+        
+      </div>
+      
+      
+    </div>
+  </div>
+
+  
+
+  
+    <div class="national-orgs">
+      <h2>National Urban Agriculture Organizations</h2>
+      <p style="font-size:.9rem;color:var(--gray-600);margin:0 0 .75rem">Federal and national resources for urban farming grants and programs.</p>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.usda.gov/topics/urban" target="_blank" rel="noopener">USDA Urban Agriculture</a></div>
+      </div>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.nifa.usda.gov/topics/urban-agriculture" target="_blank" rel="noopener">NIFA Urban Agriculture</a></div>
+      </div>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.usda.gov/peoples-garden" target="_blank" rel="noopener">USDA People's Garden Initiative</a></div>
+      </div>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.communitygarden.org" target="_blank" rel="noopener">American Community Gardening Association</a></div>
+      </div>
+      <div class="org-card">
+        <div class="org-name"><a href="https://www.usda.gov/topics/farming/beginning-farmers" target="_blank" rel="noopener">USDA Beginning Farmers and Ranchers</a></div>
+      </div>
+    </div>
+</div>
+
+
+<div class="timestamp">
+  Data scraped: 2026-08-22T13:07:39.494Z<br>
+  Sources: 50 state agriculture department websites + <a href="https://www.grants.gov" target="_blank">Grants.gov</a>
+</div>
+
+</body>
+</html>

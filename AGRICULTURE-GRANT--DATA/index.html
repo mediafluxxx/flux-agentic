@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agriculture Grant Resources — Home</title>
+<style>
+  :root {
+    --green-900: #1a3a1a;
+    --green-700: #2d5a2d;
+    --green-600: #3a7a3a;
+    --green-100: #e8f5e8;
+    --green-50: #f0faf0;
+    --gold-600: #b8860b;
+    --gold-100: #fef9e7;
+    --red-600: #c0392b;
+    --red-100: #fdecea;
+    --gray-50: #f8f9fa;
+    --gray-100: #e9ecef;
+    --gray-200: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-600: #6c757d;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    --shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.08);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,.1);
+    --radius: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--gray-50); color: var(--gray-900);
+    line-height: 1.6;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--green-900) 0%, var(--green-700) 100%);
+    color: #fff; padding: 3rem 2rem; text-align: center;
+  }
+  .hero h1 { margin: 0 0 .5rem; font-size: 2.2rem; font-weight: 700; }
+  .hero p { margin: 0; opacity: .85; font-size: 1.1rem; }
+  .hero a { color: #fff; }
+  .hero .stats {
+    display: flex; gap: 2rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap;
+  }
+  .hero .stat { text-align: center; }
+  .hero .stat-num { font-size: 2rem; font-weight: 700; display: block; }
+  .hero .stat-label { font-size: .85rem; opacity: .7; text-transform: uppercase; letter-spacing: .05em; }
+  .hero-compact { padding: 2rem 2rem 1.5rem; }
+  .hero-compact h1 { font-size: 1.8rem; }
+
+  /* Page nav (inter-page links) */
+  .page-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #fff; border-bottom: 1px solid var(--gray-200);
+    display: flex; justify-content: center; gap: 0; box-shadow: var(--shadow);
+  }
+  .page-nav a {
+    display: inline-block; padding: 1rem 2rem; text-decoration: none;
+    font-size: 1rem; font-weight: 500; color: var(--gray-600);
+    border-bottom: 3px solid transparent; transition: all .2s;
+  }
+  .page-nav a:hover { color: var(--green-700); }
+  .page-nav a.active { color: var(--green-700); border-bottom-color: var(--green-600); }
+
+  /* Filter bar */
+  .filter-bar {
+    max-width: 1200px; margin: 1.5rem auto; padding: 0 1.5rem;
+    display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+  }
+  .filter-bar input, .filter-bar select {
+    padding: .6rem 1rem; border: 1px solid var(--gray-400); border-radius: var(--radius);
+    font-size: .95rem; background: #fff;
+  }
+  .filter-bar input { flex: 1; min-width: 200px; }
+  .filter-bar select { min-width: 140px; }
+  .result-count { font-size: .85rem; color: var(--gray-600); margin-left: auto; }
+
+  /* Badges */
+  .badge {
+    display: inline-block; font-size: .7rem; font-weight: 600; padding: .15rem .5rem;
+    border-radius: 4px; text-transform: uppercase; letter-spacing: .03em; margin-left: .5rem;
+    vertical-align: middle;
+  }
+  .badge-open { background: var(--green-100); color: var(--green-700); }
+  .badge-closed { background: var(--red-100); color: var(--red-600); }
+  .badge-unknown { background: var(--gray-100); color: var(--gray-600); }
+  .badge-error { background: var(--red-100); color: var(--red-600); }
+  .badge-none { background: var(--gray-100); color: var(--gray-600); }
+  .badge-review { background: var(--gold-100); color: var(--gold-600); }
+
+  .timestamp { text-align: center; padding: 2rem; color: var(--gray-600); font-size: .85rem; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 1.5rem; }
+    .hero .stats { gap: 1rem; }
+    .page-nav a { padding: .75rem 1rem; font-size: .85rem; }
+    .filter-bar { flex-direction: column; }
+    .filter-bar input { min-width: 100%; }
+  }
+  .home-cards {
+    max-width: 900px; margin: 2rem auto; padding: 0 1.5rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  }
+  .home-card {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow-lg);
+    padding: 2rem; text-decoration: none; color: var(--gray-900);
+    border-left: 5px solid var(--green-600); transition: transform .15s, box-shadow .15s;
+  }
+  .home-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+  .home-card h2 { margin: 0 0 .5rem; font-size: 1.3rem; color: var(--green-700); }
+  .home-card p { margin: 0 0 1rem; color: var(--gray-600); font-size: .95rem; }
+  .home-card .card-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .home-card .card-stat { text-align: center; }
+  .home-card .card-stat-num { font-size: 1.5rem; font-weight: 700; color: var(--green-700); display: block; }
+  .home-card .card-stat-label { font-size: .75rem; color: var(--gray-600); text-transform: uppercase; letter-spacing: .04em; }
+  @media (max-width: 768px) {
+    .home-cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Agriculture Grant Resources</h1>
+  <p>Grant opportunities from all 50 US state agriculture departments and Grants.gov</p>
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-num">42</span>
+      <span class="stat-label">States with Grants</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">276</span>
+      <span class="stat-label">State Grant References</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">0</span>
+      <span class="stat-label">Needs Review</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">140</span>
+      <span class="stat-label">Federal Opportunities</span>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="page-nav">
+  <a href="index.html" class="active">Home</a>
+  <a href="state-grants.html" class="">State Grants</a>
+  <a href="federal-grants.html" class="">Federal Grants</a>
+</div>
+
+<div class="home-cards">
+  <a href="state-grants.html" class="home-card">
+    <h2>State Department Grants</h2>
+    <p>Grant opportunities crawled from all 50 state agriculture department websites.</p>
+    <div class="card-stats">
+      <div class="card-stat">
+        <span class="card-stat-num">42</span>
+        <span class="card-stat-label">States</span>
+      </div>
+      <div class="card-stat">
+        <span class="card-stat-num">276</span>
+        <span class="card-stat-label">Grant Refs</span>
+      </div>
+      <div class="card-stat">
+        <span class="card-stat-num">0</span>
+        <span class="card-stat-label">Needs Review</span>
+      </div>
+    </div>
+  </a>
+  <a href="federal-grants.html" class="home-card">
+    <h2>Federal Grants (Grants.gov)</h2>
+    <p>Agriculture and food-related opportunities from the federal Grants.gov database.</p>
+    <div class="card-stats">
+      <div class="card-stat">
+        <span class="card-stat-num">140</span>
+        <span class="card-stat-label">Total</span>
+      </div>
+      <div class="card-stat">
+        <span class="card-stat-num">140</span>
+        <span class="card-stat-label">Open / Forecasted</span>
+      </div>
+    </div>
+  </a>
+</div>
+
+
+<div class="timestamp">
+  Data scraped: 2026-08-22T13:07:39.494Z<br>
+  Sources: 50 state agriculture department websites + <a href="https://www.grants.gov" target="_blank">Grants.gov</a>
+</div>
+
+</body>
+</html>
