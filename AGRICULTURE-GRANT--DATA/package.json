@@ -10,6 +10,7 @@
     "scrape:states": "node scraper.mjs --states-only",
     "scrape:grants-gov": "node scraper.mjs --grants-gov-only",
     "build": "node build-page.mjs",
+    "vercel-build": "node build-page.mjs",
     "scrape:urban": "node urban-scraper.mjs",
     "refresh": "node scraper.mjs --json grants-search-*.csv > data.json && node urban-scraper.mjs && node build-page.mjs",
     "refresh:no-urban": "node scraper.mjs --json grants-search-*.csv > data.json && node build-page.mjs",
